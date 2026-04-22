@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>99 Nights — Guide des Quêtes Journalières</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --bg2: #0e1118;
+    --bg3: #13161f;
+    --panel: #161b26;
+    --panel2: #1a2030;
+    --border: #2a3148;
+    --border2: #3a4460;
+    --t1: #4ade80;
+    --t1dim: #1a3d28;
+    --t1glow: rgba(74,222,128,0.15);
+    --t2: #facc15;
+    --t2dim: #3d330a;
+    --t2glow: rgba(250,204,21,0.15);
+    --t3: #f87171;
+    --t3dim: #3d1515;
+    --t3glow: rgba(248,113,113,0.15);
+    --diamond: #67e8f9;
+    --diamond-glow: rgba(103,232,249,0.2);
+    --text: #c8d0e8;
+    --text-dim: #7a88a8;
+    --text-bright: #eef2ff;
+    --accent: #818cf8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 17px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* STARS BG */
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; }
+    50% { opacity: var(--op, 0.6); }
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 20px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 300px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .header-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    border: 1px solid var(--border2);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(22px, 5vw, 42px);
+    font-weight: 900;
+    color: var(--text-bright);
+    line-height: 1.2;
+    text-shadow: 0 0 60px rgba(129,140,248,0.4);
+    margin-bottom: 12px;
+  }
+  h1 span {
+    background: linear-gradient(135deg, #818cf8, #67e8f9, #4ade80);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-sub {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--text-dim);
+    margin-top: 8px;
+  }
+
+  /* DIAMOND COUNTER */
+  .diamond-bar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+  .diamond-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+  }
+  .diamond-stat .gem { font-size: 18px; }
+  .diamond-stat .val { color: var(--diamond); font-weight: 700; }
+  .diamond-stat .lbl { color: var(--text-dim); font-size: 11px; }
+
+  /* CONTROLS */
+  .controls {
+    position: relative;
+    z-index: 10;
+    max-width: 1100px;
+    margin: 0 auto 10px;
+    padding: 0 20px;
+  }
+  .controls-inner {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .controls-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .filter-btns {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .filter-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 7px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--text-bright); }
+  .filter-btn.active-filter { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .filter-btn.t1-btn.active-filter { background: var(--t1); border-color: var(--t1); color: #000; }
+  .filter-btn.t2-btn.active-filter { background: var(--t2); border-color: var(--t2); color: #000; }
+  .filter-btn.t3-btn.active-filter { background: var(--t3); border-color: var(--t3); color: #000; }
+  .filter-btn.done-btn.active-filter { background: #374151; border-color: #4b5563; color: #9ca3af; }
+
+  /* SEARCH */
+  .search-wrap {
+    position: relative;
+    z-index: 10;
+    max-width: 1100px;
+    margin: 0 auto 24px;
+    padding: 0 20px;
+  }
+  .search-input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 20px 12px 44px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    color: var(--text-bright);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text-dim); }
+  .search-icon {
+    position: absolute;
+    left: 34px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    font-size: 16px;
+  }
+
+  /* MAIN CONTENT */
+  main {
+    position: relative;
+    z-index: 10;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* TIER SECTION */
+  .tier-section {
+    margin-bottom: 40px;
+  }
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tier-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+  }
+  .tier-badge.t1 { background: var(--t1dim); color: var(--t1); border: 1px solid var(--t1); }
+  .tier-badge.t2 { background: var(--t2dim); color: var(--t2); border: 1px solid var(--t2); }
+  .tier-badge.t3 { background: var(--t3dim); color: var(--t3); border: 1px solid var(--t3); }
+
+  .tier-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 18px;
+    color: var(--text-bright);
+  }
+  .tier-reward {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--diamond);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tier-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 3px 10px;
+    background: var(--bg3);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  /* QUEST CARDS */
+  .quests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .quest-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.25s;
+    cursor: pointer;
+    position: relative;
+  }
+  .quest-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  .quest-card.active-quest {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), 0 8px 30px rgba(129,140,248,0.2);
+  }
+  .quest-card.active-quest.t1 { border-color: var(--t1); box-shadow: 0 0 0 1px var(--t1), 0 8px 30px var(--t1glow); }
+  .quest-card.active-quest.t2 { border-color: var(--t2); box-shadow: 0 0 0 1px var(--t2), 0 8px 30px var(--t2glow); }
+  .quest-card.active-quest.t3 { border-color: var(--t3); box-shadow: 0 0 0 1px var(--t3), 0 8px 30px var(--t3glow); }
+  .quest-card.completed-quest {
+    opacity: 0.45;
+    filter: grayscale(0.7);
+  }
+  .quest-card.hidden-card {
+    display: none;
+  }
+
+  /* Active glow strip */
+  .quest-card.active-quest::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .quest-card.active-quest.t1::before { background: linear-gradient(90deg, transparent, var(--t1), transparent); }
+  .quest-card.active-quest.t2::before { background: linear-gradient(90deg, transparent, var(--t2), transparent); }
+  .quest-card.active-quest.t3::before { background: linear-gradient(90deg, transparent, var(--t3), transparent); }
+
+  .quest-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .quest-checkbox {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border2);
+    background: var(--bg3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+  .active-quest .quest-checkbox.t1 { border-color: var(--t1); background: var(--t1dim); color: var(--t1); }
+  .active-quest .quest-checkbox.t2 { border-color: var(--t2); background: var(--t2dim); color: var(--t2); }
+  .active-quest .quest-checkbox.t3 { border-color: var(--t3); background: var(--t3dim); color: var(--t3); }
+  .completed-quest .quest-checkbox { border-color: #4b5563; background: #1f2937; color: #6b7280; }
+
+  .quest-emoji { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+  .quest-name {
+    font-family: 'Crimson Pro', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-bright);
+    line-height: 1.3;
+    flex: 1;
+  }
+  .completed-quest .quest-name { text-decoration: line-through; color: var(--text-dim); }
+
+  /* EXPAND TOGGLE */
+  .quest-expand-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .quest-expand-btn:hover { background: var(--bg3); color: var(--text-bright); }
+
+  .quest-body {
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+  }
+  .quest-body.expanded {
+    max-height: 1200px;
+    padding: 0 16px 16px;
+  }
+
+  /* QUEST DETAILS */
+  .quest-description {
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 15px;
+    margin: 14px 0 12px;
+    padding-left: 10px;
+    border-left: 2px solid var(--border2);
+  }
+
+  .steps-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .steps-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .steps-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .step-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .step-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .t1 .step-num { background: var(--t1dim); color: var(--t1); }
+  .t2 .step-num { background: var(--t2dim); color: var(--t2); }
+  .t3 .step-num { background: var(--t3dim); color: var(--t3); }
+
+  .tip-box {
+    margin-top: 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--text-dim);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .tip-icon { flex-shrink: 0; font-size: 16px; }
+
+  .warning-box {
+    margin-top: 10px;
+    background: rgba(248,113,113,0.07);
+    border: 1px solid rgba(248,113,113,0.25);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #fca5a5;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  /* ACTIVE FILTER NOTICE */
+  .filter-notice {
+    position: relative;
+    z-index: 10;
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    padding: 0 20px;
+    display: none;
+  }
+  .filter-notice.visible { display: block; }
+  .filter-notice-inner {
+    background: rgba(129,140,248,0.08);
+    border: 1px solid rgba(129,140,248,0.3);
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .clear-filter-btn {
+    margin-left: auto;
+    background: none;
+    border: 1px solid rgba(129,140,248,0.4);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .clear-filter-btn:hover { background: rgba(129,140,248,0.15); }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    display: none;
+  }
+  .empty-state.visible { display: block; }
+  .empty-state-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state-text { font-style: italic; color: var(--text-dim); font-size: 18px; }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    position: relative;
+    z-index: 10;
+    max-width: 1100px;
+    margin: 0 auto 24px;
+    padding: 0 20px;
+  }
+  .progress-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .progress-bar-bg {
+    height: 6px;
+    background: var(--panel);
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #818cf8, #67e8f9);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  @media (max-width: 600px) {
+    .quests-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 24px; }
+    .tier-title { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+
+<!-- Header -->
+<header>
+  <div class="header-badge">99 Nights in the Forest · Guide FR</div>
+  <h1>Quêtes <span>Journalières</span></h1>
+  <p class="header-sub">Coche les quêtes actives pour voir leurs astuces · 15 💎 par jour</p>
+</header>
+
+<!-- Stats Bar -->
+<div class="diamond-bar">
+  <div class="diamond-stat">
+    <span class="gem">💎</span>
+    <div>
+      <div class="val" id="stat-active">0</div>
+      <div class="lbl">QUÊTES ACTIVES</div>
+    </div>
+  </div>
+  <div class="diamond-stat">
+    <span class="gem">✅</span>
+    <div>
+      <div class="val" id="stat-done">0</div>
+      <div class="lbl">COMPLÉTÉES</div>
+    </div>
+  </div>
+  <div class="diamond-stat">
+    <span class="gem">🏆</span>
+    <div>
+      <div class="val" id="stat-diamonds">0</div>
+      <div class="lbl">💎 AUJOURD'HUI</div>
+    </div>
+  </div>
+</div>
+
+<!-- Progress -->
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>PROGRESSION JOURNALIÈRE</span>
+    <span id="progress-text">0 / 3 quêtes</span>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progress-fill"></div>
+  </div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <div class="controls-inner">
+    <span class="controls-label">Filtrer :</span>
+    <div class="filter-btns">
+      <button class="filter-btn active-filter" data-filter="all">Toutes</button>
+      <button class="filter-btn t1-btn" data-filter="t1">🟢 Tier 1</button>
+      <button class="filter-btn t2-btn" data-filter="t2">🟡 Tier 2</button>
+      <button class="filter-btn t3-btn" data-filter="t3">🔴 Tier 3</button>
+      <button class="filter-btn" data-filter="active">⚡ Actives</button>
+      <button class="filter-btn done-btn" data-filter="done">✅ Complétées</button>
+    </div>
+  </div>
+</div>
+
+<!-- Search -->
+<div class="search-wrap">
+  <span class="search-icon">🔍</span>
+  <input type="text" class="search-input" id="searchInput" placeholder="Rechercher une quête...">
+</div>
+
+<!-- Filter Notice -->
+<div class="filter-notice" id="filterNotice">
+  <div class="filter-notice-inner">
+    <span>⚡</span>
+    <span id="filterNoticeText">Filtre actif</span>
+    <button class="clear-filter-btn" onclick="clearFilter()">Effacer</button>
+  </div>
+</div>
+
+<!-- Main -->
+<main id="mainContent">
+
+  <!-- TIER 1 -->
+  <div class="tier-section" id="section-t1">
+    <div class="tier-header">
+      <span class="tier-badge t1">Tier 1</span>
+      <h2 class="tier-title">Quêtes Faciles</h2>
+      <span class="tier-reward">💎 5 diamonds</span>
+      <span class="tier-count" id="count-t1">10 quêtes</span>
+    </div>
+    <div class="quests-grid" id="grid-t1"></div>
+  </div>
+
+  <!-- TIER 2 -->
+  <div class="tier-section" id="section-t2">
+    <div class="tier-header">
+      <span class="tier-badge t2">Tier 2</span>
+      <h2 class="tier-title">Quêtes Moyennes</h2>
+      <span class="tier-reward">💎 5 + 🔥 Flamme</span>
+      <span class="tier-count" id="count-t2">8 quêtes</span>
+    </div>
+    <div class="quests-grid" id="grid-t2"></div>
+  </div>
+
+  <!-- TIER 3 -->
+  <div class="tier-section" id="section-t3">
+    <div class="tier-header">
+      <span class="tier-badge t3">Tier 3</span>
+      <h2 class="tier-title">Quêtes Difficiles</h2>
+      <span class="tier-reward">💎 5 + 🔥 Flamme</span>
+      <span class="tier-count" id="count-t3">8 quêtes</span>
+    </div>
+    <div class="quests-grid" id="grid-t3"></div>
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <div class="empty-state-icon">🌲</div>
+    <p class="empty-state-text">Aucune quête ne correspond à ta recherche...</p>
+  </div>
+
+</main>
+
+<footer>99 NIGHTS IN THE FOREST · GUIDE DES QUÊTES JOURNALIÈRES · ROBLOX</footer>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const QUESTS = {
+  t1: [
+    {
+      id: 'q1', emoji: '🔧', name: 'Améliorer un outil au niveau 2',
+      desc: 'Utilise le Skills Building pour upgrader n\'importe quel outil — hache, sac ou lampe.',
+      steps: [
+        'Ramasse du <strong>Scrap</strong> dans les bâtiments autour du campfire (rochers métalliques, coffres)',
+        'Repère le <strong>Skills Building</strong> près de ton campfire (bâtiment avec icône d\'outil sur la carte)',
+        'Interagis avec (touche <strong>E</strong>)',
+        'Sélectionne n\'importe quel outil — <strong>la hache est la plus facile</strong> car tu l\'as dès le départ',
+        'Confirme l\'upgrade → ✅ Quête complétée!'
+      ],
+      tip: 'Fais ça le plus tôt possible au Jour 1 — tu as déjà tout ce qu\'il faut!',
+    },
+    {
+      id: 'q2', emoji: '💰', name: 'Dépenser 100 coins chez le Furniture Trader',
+      desc: 'Acheter pour 100 Mossy Coins de meubles chez le Furniture Trader en un seul run.',
+      steps: [
+        'Ramasse des <strong>Mossy Coins</strong> partout sur la carte — sur des troncs tombés, dans des bâtiments (1 stack = 5 coins)',
+        'Tue des <strong>cultistes</strong> pour des coins supplémentaires (le Cultist King en donne 3-5!)',
+        'Attends le message <em>"The Furniture Trader is wandering through the Forest today"</em>',
+        'Repère son icône sur ta <strong>carte</strong> et va le voir',
+        'Achète des meubles bon marché jusqu\'à atteindre <strong>100 coins</strong> dépensés → ✅ Quête complétée!'
+      ],
+      warning: '⚠️ Ne tue pas son cheval! Si tu le tues, la carriole disparaît et tu ne peux plus acheter.',
+    },
+    {
+      id: 'q3', emoji: '🎨', name: 'Peindre un meuble',
+      desc: 'Appliquer de la peinture sur un meuble dans ta base avec le Paint Brush.',
+      steps: [
+        'Trouve le <strong>Furniture Trader</strong> — le <strong>Paint Brush est sur le côté de sa carriole</strong> (gratuit à prendre!)',
+        'Ou joue la classe <strong>Decorator</strong> pour en avoir un dès le départ',
+        'Il peut aussi se trouver à la <strong>Fishing Hut</strong> (cabane de pêche)',
+        'Achète un <strong>beanbag ou coussin</strong> chez le Furniture Trader (meubles peignables)',
+        'Place le meuble près de ton campfire',
+        'Équipe le <strong>Paint Brush</strong> dans ton inventaire',
+        'Sélectionne une couleur dans la palette',
+        'Approche-toi du meuble jusqu\'à ce qu\'il soit surligné, puis maintiens <strong>E</strong> → ✅ Quête complétée!'
+      ],
+      warning: '⚠️ Seuls certains meubles peuvent être peints : beanbags, coussins, cloth frames. PAS les lanternes, toilettes ou clôtures.',
+    },
+    {
+      id: 'q4', emoji: '🪑', name: 'Construire X meubles',
+      desc: 'Placer un certain nombre de meubles décoratifs près du campfire.',
+      steps: [
+        'Ramasse des <strong>Mossy Coins</strong> en explorant la forêt',
+        'Trouve le <strong>Furniture Trader</strong> et achète plusieurs items bon marché (chaises, tapis...)',
+        'Les items achetés apparaissent comme <strong>blueprints</strong> dans ton inventaire',
+        'Sélectionne chaque blueprint et <strong>place-le</strong> près de ton campfire',
+        'Répète jusqu\'au nombre requis → ✅ Quête complétée!'
+      ],
+      tip: 'Achète les items les moins chers pour en avoir le plus possible avec peu de coins!',
+    },
+    {
+      id: 'q5', emoji: '🌱', name: 'Construire 5 parcelles de ferme',
+      desc: 'Placer 5 Farm Plots dans un seul run.',
+      steps: [
+        'Ramasse du <strong>Scrap</strong> dans les environs',
+        'Va au <strong>Crafting Bench</strong> et upgrade-le au <strong>niveau 2</strong> si ce n\'est pas fait',
+        'Craft <strong>5 Farm Plot blueprints</strong> dans le menu',
+        'Ouvre ton inventaire, sélectionne chaque blueprint',
+        'Place les 5 parcelles près de ton campfire → ✅ Quête complétée!'
+      ],
+    },
+    {
+      id: 'q6', emoji: '🌸', name: 'Collecter X fleurs',
+      desc: 'Ramasser un certain nombre de fleurs dans la forêt pendant un run.',
+      steps: [
+        'Commence à explorer dès le <strong>Jour 1</strong>',
+        'Ramasse toutes les fleurs visibles sur le sol (interagis avec <strong>E</strong>)',
+        'Les fleurs poussent <strong>partout dans la forêt</strong> — cherche de petites fleurs colorées',
+        'Va chez la <strong>Fée</strong> dans le Fairy Biome — son jardin a <strong>9 fleurs gratuites</strong> à ramasser!',
+        'Continue à explorer pour trouver la quantité requise → ✅ Quête complétée!'
+      ],
+      tip: 'Les fleurs ne prennent pas de place dans ton sac — ramasse-en le plus possible dès le début!',
+    },
+    {
+      id: 'q7', emoji: '🔥', name: 'Survivre une nuit avec le feu éteint',
+      desc: 'Passer une nuit entière sans que le campfire soit allumé.',
+      steps: [
+        '⚠️ <strong>Fais ça seulement aux jours 1-5</strong> — le Cerf est peu dangereux au début',
+        'Avant le coucher du soleil, laisse le campfire <strong>se vider de son carburant</strong> (ne rajoute pas de bois)',
+        'Quand la nuit tombe, reste <strong>mobile</strong> — ne reste pas immobile',
+        'Cache-toi derrière des rochers ou grimpe sur une <strong>structure élevée</strong>',
+        'Utilise ta <strong>lampe de poche</strong> pour repousser le Cerf si nécessaire',
+        'Survie jusqu\'à l\'aube → ✅ Quête complétée!'
+      ],
+      warning: '⚠️ Ne JAMAIS faire ça après le Jour 10 — le Cerf devient mortel sans feu!',
+    },
+    {
+      id: 'q8', emoji: '🖼️', name: 'Accrocher un tableau',
+      desc: 'Placer un tableau sur un mur de ta base.',
+      steps: [
+        'Ramasse des <strong>Mossy Coins</strong> en explorant',
+        'Va chez le <strong>Furniture Trader</strong> et achète n\'importe quel tableau',
+        'Si tu n\'as pas de mur : construis-en un à ta base avec des logs au <strong>Crafting Bench</strong>',
+        'Sélectionne le tableau dans ton inventaire',
+        'Approche-toi d\'un mur et <strong>place le tableau dessus</strong> → ✅ Quête complétée!'
+      ],
+    },
+    {
+      id: 'q9', emoji: '🌳', name: 'Couper un Brightwood Tree',
+      desc: 'Abattre un arbre lumineux/brillant spécial dans le Fairy Biome.',
+      steps: [
+        'Monte ton campfire au <strong>niveau 3-4</strong> pour débloquer la zone du Fairy Biome',
+        'Cherche le <strong>Fairy Biome</strong> sur ta carte (zone dorée avec champignons géants)',
+        'Repère un <strong>Brightwood Tree</strong> : tronc épais, légèrement lumineux',
+        '⚠️ Les arbres brun pâle ordinaires <strong>ne comptent PAS</strong> — seuls les vrais Brightwoods avec tronc épais fonctionnent',
+        'Coupe-le avec ta <strong>hache</strong> → ✅ Quête complétée!'
+      ],
+      tip: 'Les vrais Brightwood Trees droppent plus de bûches que les arbres normaux — bonus pratique!',
+    },
+    {
+      id: 'q10', emoji: '📦', name: 'Mettre un Upgrade Tablet dans le Crafting Bench',
+      desc: 'Insérer un tablet d\'amélioration de recette dans le Crafting Bench.',
+      steps: [
+        'Explore la forêt et ouvre des <strong>coffres Gold ou Legendary</strong> pour trouver un Upgrade Tablet',
+        'Plus fréquent dans les zones profondes (campfire niveau 4+)',
+        'Ramène l\'Upgrade Tablet à ta base',
+        'Ouvre le <strong>Crafting Bench</strong>',
+        'Insère l\'Upgrade Tablet dans le slot prévu → ✅ Quête complétée!'
+      ],
+    },
+  ],
+  t2: [
+    {
+      id: 'q11', emoji: '🦌', name: 'Se faire chasser par le Cerf à pleine vitesse',
+      desc: 'Laisser le Cerf te poursuivre jusqu\'à ce qu\'il atteigne sa vitesse maximale.',
+      steps: [
+        'Attends <strong>après le Jour 5</strong> — le Cerf doit être actif et potentiellement affamé',
+        'Mange un <strong>stew</strong> avant pour avoir HP plein',
+        'Garde ta <strong>lampe de poche chargée</strong> au cas où',
+        'La nuit, repère le Cerf (il observe toujours de loin)',
+        '<strong>Ne l\'éclaire pas</strong> avec ta lampe — il va avancer vers toi',
+        'Attends qu\'il <strong>verrouille sa cible sur toi</strong> et commence à courir à pleine vitesse',
+        '<strong>Cours en direction du campfire</strong> — quelques secondes de poursuite suffisent → ✅ Quête complétée!',
+        'Dès validé, <strong>éclaire-le avec ta lampe</strong> pour le faire fuir'
+      ],
+      warning: '⚠️ Reste proche du campfire! Si tu te fais attraper loin du feu, c\'est la mort.',
+    },
+    {
+      id: 'q12', emoji: '🎣', name: 'Pêcher 5 choses qui ne sont pas des poissons',
+      desc: 'Sortir 5 items non-poissons avec une canne à pêche.',
+      steps: [
+        'Monte le campfire au <strong>niveau 2</strong> pour débloquer la Fishing Hut',
+        'Va à la <strong>Fishing Hut</strong> (cabane de pêche sur la carte) et prends une <strong>Old Rod</strong> (gratuite)',
+        'Va à l\'<strong>étang aux grenouilles</strong> — les <strong>clés de grenouilles comptent comme non-poissons!</strong>',
+        'Équipe la canne et pêche — continue jusqu\'à obtenir <strong>5 items non-poissons</strong> (bouteilles, clés, junk...)',
+        '→ ✅ Quête complétée!'
+      ],
+      tip: 'L\'étang aux grenouilles est le meilleur spot — les Frog Keys tombent souvent!',
+    },
+    {
+      id: 'q13', emoji: '🧚', name: 'Acheter une boîte de graines à la Fée',
+      desc: 'Acheter un seed box chez le Fairy Trader avec des fleurs.',
+      steps: [
+        'Ramasse des <strong>fleurs</strong> partout sur le sol dès le début du run',
+        'Monte le campfire au <strong>niveau 3-4</strong> pour accéder au Fairy Biome',
+        'Cherche le <strong>Fairy Biome</strong> sur ta carte',
+        'Va voir la <strong>Fée</strong> à sa Mushroom House',
+        'Ramasse les <strong>9 fleurs gratuites</strong> de son jardin au passage',
+        'Achète <strong>1 seed box</strong> pour 20 fleurs → ✅ Quête complétée!'
+      ],
+      tip: 'Le premier seed box coûte 20 fleurs — le prix monte de 20 à chaque achat suivant.',
+    },
+    {
+      id: 'q14', emoji: '⚔️', name: 'Battre une vague de cultistes en moins de 20 secondes',
+      desc: 'Éliminer toute une vague de raid de cultistes en 20 secondes maximum.',
+      steps: [
+        'Prépare une <strong>bonne arme</strong> avant (fusil, Katana ou grenades)',
+        'Les raids commencent généralement au <strong>Jour 4</strong>, puis tous les ~4 jours',
+        'Positionne-toi <strong>près du campfire</strong> — les cultistes spawnent autour',
+        'Dès que la vague commence, <strong>attaque immédiatement</strong> sans t\'éloigner',
+        'La classe <strong>Grenadier</strong> avec une grenade d\'impact peut tuer tout un groupe instantanément',
+        'Élimine tous les cultistes avant 20 secondes → ✅ Quête complétée!'
+      ],
+      tip: 'Commence la vague de nuit près du feu — les cultistes sont groupés et plus faciles à tuer en masse!',
+    },
+    {
+      id: 'q15', emoji: '🛡️', name: 'Survivre à 5 vagues de cultistes',
+      desc: 'Défendre ton camp contre 5 raids de cultistes (sur plusieurs jours).',
+      steps: [
+        'Construis des <strong>pièges</strong> (bear traps, piques) autour du campfire',
+        'Stocke des <strong>bandages et médkits</strong> avant chaque raid',
+        'Garde le feu <strong>bien alimenté</strong> pendant les nuits de raid',
+        'Les raids arrivent ~tous les 4 jours — joue normalement et défends ton camp',
+        'Soigne-toi entre les vagues',
+        'Répète pour <strong>5 raids</strong> au total → ✅ Quête complétée!'
+      ],
+    },
+    {
+      id: 'q16', emoji: '🐾', name: 'Avoir 3 pets différents en même temps',
+      desc: 'Apprivoiser 3 animaux différents simultanément.',
+      steps: [
+        'Trouve une <strong>Taming Flute</strong> dans un coffre (ou achète-la au Pelt Trader)',
+        'Apprivoise un <strong>lapin</strong> — approche doucement, utilise la flûte',
+        'Apprivoise un <strong>loup</strong> — affaiblis-le d\'abord sans le tuer, puis utilise la flûte',
+        'Apprivoise un <strong>3ème animal</strong> (renard, cerf, ours...) de la même façon',
+        'Les 3 pets doivent être <strong>actifs en même temps</strong> → ✅ Quête complétée!'
+      ],
+      tip: 'La classe Beastmaster niveau 3 invoque automatiquement un Alpha Wolf — compte pour la quête!',
+    },
+    {
+      id: 'q17', emoji: '💊', name: 'Fabriquer 20 munitions',
+      desc: 'Crafté 20 unités de munitions à l\'Ammo Crate.',
+      steps: [
+        'Ramasse du <strong>Scrap</strong> (minimum 20+ pour commencer)',
+        'Craft une <strong>Ammo Crate</strong> au Crafting Bench et place-la à ta base',
+        'Interagis avec l\'Ammo Crate',
+        'Craft des <strong>balles de revolver ou de fusil</strong> — 20 unités',
+        '→ ✅ Quête complétée!'
+      ],
+    },
+    {
+      id: 'q18', emoji: '🌟', name: 'Consommer 50 lucioles',
+      desc: 'Ramasser et manger 50 lucioles pour recharger ta lampe de poche.',
+      steps: [
+        'Assure-toi d\'avoir une <strong>lampe de poche</strong> équipée',
+        'Les lucioles apparaissent <strong>la nuit</strong> partout dans la forêt — cherche de petites lumières clignotantes',
+        'Explore autour du campfire la nuit pour les ramasser',
+        'Approche-toi et appuie sur <strong>E</strong> pour les ramasser',
+        'Consomme-les dans ton inventaire pour recharger ta lampe',
+        'Répète jusqu\'à <strong>50 lucioles</strong> consommées → ✅ Quête complétée!'
+      ],
+      tip: 'Les zones profondes de la forêt ont plus de lucioles — explore loin du camp la nuit!',
+    },
+  ],
+  t3: [
+    {
+      id: 'q19', emoji: '💎', name: 'Connecter les 4 fragments de la Gemme de la Forêt',
+      desc: 'Trouver et assembler les 4 fragments de la Gem of the Forest.',
+      steps: [
+        'Monte le campfire au <strong>niveau 5-6</strong> pour accéder aux zones les plus profondes',
+        'Explore intensément les zones éloignées — cherche des <strong>coffres légendaires</strong> et des <strong>grottes</strong>',
+        'Les fragments ressemblent à des <strong>éclats de cristal</strong> lumineux',
+        'Ramasse les <strong>4 fragments</strong> un par un',
+        'Dans ton inventaire, <strong>combine les 4 fragments</strong> ensemble → ✅ Quête complétée!'
+      ],
+      tip: 'C\'est une quête longue — prévois une session dédiée avec armure, médkits et nourriture.',
+    },
+    {
+      id: 'q20', emoji: '🪖', name: 'Fabriquer un casque à l\'atelier',
+      desc: 'Craft un helmet au Tool Workshop.',
+      steps: [
+        'Monte le <strong>Crafting Bench</strong> au niveau requis (niveau 3+ recommandé)',
+        'Craft un <strong>Tool Workshop</strong> avec les matériaux nécessaires et place-le à ta base',
+        'Rassemble les matériaux : métal, scrap avancé (trouve-les dans des coffres high-tier)',
+        'Interagis avec le <strong>Tool Workshop</strong>',
+        'Craft n\'importe quel <strong>casque</strong> dans le menu → ✅ Quête complétée!'
+      ],
+    },
+    {
+      id: 'q21', emoji: '🔴', name: 'Ouvrir 3 Ruby Chests',
+      desc: 'Ouvrir 3 coffres rubis (le Stronghold en garantit un par run).',
+      steps: [
+        'Farm le <strong>Stronghold niveau 1</strong> — chaque run garantit 1 Ruby Chest',
+        'Après avoir ouvert le Ruby Chest, <strong>quitte le serveur</strong>',
+        '<strong>Rejoins un nouveau serveur</strong> — le Stronghold repart au niveau 1',
+        'Répète <strong>3 fois</strong> au total → ✅ Quête complétée!'
+      ],
+      tip: 'C\'est la Tier 3 la plus facile à compléter! 3 runs Stronghold = quête finie en ~45 minutes.',
+    },
+    {
+      id: 'q22', emoji: '🏰', name: 'Compléter un Stronghold niveau 4',
+      desc: 'Battre le Cultist Stronghold à sa 4ème difficulté en restant dans le même serveur.',
+      steps: [
+        'Reste dans le <strong>même serveur</strong> (ne change pas de serveur entre les runs!)',
+        'Complète le Stronghold <strong>4 fois de suite</strong> dans ce serveur',
+        'Amène une <strong>équipe complète</strong> — le niveau 4 est très difficile',
+        'Prépare beaucoup de <strong>munitions, armure et médkits</strong>',
+        'Bat tous les étages du <strong>niveau 4</strong> → ✅ Quête complétée!'
+      ],
+      warning: '⚠️ Le niveau 4 est bien plus difficile — ne tente pas en solo sans très bon équipement!',
+    },
+    {
+      id: 'q23', emoji: '⭐', name: 'Fabriquer un item Tier 5',
+      desc: 'Craft n\'importe quel objet de tier 5 au Crafting Bench.',
+      steps: [
+        'Monte le <strong>Crafting Bench</strong> au niveau maximum',
+        'Rassemble des <strong>matériaux rares</strong> : Obsidiron Bars, Cultist Gems, etc.',
+        'Dans le menu crafting, filtre les items <strong>Tier 5</strong>',
+        'Craft n\'importe lequel → ✅ Quête complétée!'
+      ],
+      tip: 'Les Cultist Gems tombent sur les cultistes lors des raids — ne les ignore pas!',
+    },
+    {
+      id: 'q24', emoji: '🦴', name: 'Manger 3 côtes levées (Ribs)',
+      desc: 'Consommer 3 Ribs droppés sur des ours.',
+      steps: [
+        'Trouve des <strong>ours</strong> sur la carte (zones profondes, campfire niveau 3+)',
+        'Tue-les et récupère leurs <strong>Ribs</strong>',
+        '<strong>Cuisine les Ribs</strong> au campfire (ne mange pas cru!)',
+        'Mange <strong>3 Ribs</strong> → ✅ Quête complétée!'
+      ],
+      tip: 'Les ours sont dans les zones profondes — prépare du bon équipement avant de les chasser!',
+    },
+    {
+      id: 'q25', emoji: '🦣', name: 'Apprivoiser un Mammouth',
+      desc: 'Dompter un mammouth dans le Snow Biome.',
+      steps: [
+        'Monte le campfire au <strong>niveau 5+</strong> pour accéder au Snow Biome',
+        'Assure-toi d\'avoir une <strong>Taming Flute améliorée</strong> (niveau 2+ recommandé)',
+        'Va dans le <strong>Snow Biome</strong> (zone enneigée sur la carte)',
+        'Repère le <strong>Mammouth</strong> (énorme créature)',
+        'Affaiblis-le <strong>très doucement</strong> — quelques frappes faibles seulement',
+        '<strong>NE LE TUE PAS</strong>',
+        'Utilise la <strong>Taming Flute</strong> sur lui → ✅ Quête complétée!'
+      ],
+      warning: '⚠️ Stock de carburant important avant d\'aller dans le Snow Biome — le froid draine l\'endurance!',
+    },
+    {
+      id: 'q26', emoji: '👑', name: 'Vaincre le Cultist King',
+      desc: 'Battre le boss final du Stronghold.',
+      steps: [
+        'Prépare <strong>armure, beaucoup de munitions, médkits et nourriture</strong>',
+        'Amène une <strong>équipe de 3-4 joueurs</strong> si possible',
+        'Bats les <strong>3 étages du Stronghold</strong> normalement',
+        'Au 3ème étage, le <strong>Cultist King</strong> spawn — boss massif avec énormément de HP',
+        'Garde tes <strong>distances</strong>, utilise explosifs ou armes à feu puissantes',
+        'Évite ses attaques AOE en te <strong>déplaçant constamment</strong>',
+        'Tue-le pour obtenir la <strong>Masse du Roi Cultiste</strong> → ✅ Quête complétée!'
+      ],
+      tip: 'Récompense bonus : La Masse du Roi Cultiste est l\'arme de mêlée la plus puissante du jeu!',
+    },
+  ],
+};
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let activeQuests = new Set();
+let completedQuests = new Set();
+let currentFilter = 'all';
+let searchQuery = '';
+
+// ─── STARS ───────────────────────────────────────────────────────────────────
+function makeStars() {
+  const container = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --dur:${2+Math.random()*4}s;
+      --op:${0.3+Math.random()*0.5};
+      animation-delay:${Math.random()*5}s;
+    `;
+    container.appendChild(s);
+  }
+}
+
+// ─── RENDER QUEST CARD ───────────────────────────────────────────────────────
+function renderCard(quest, tier) {
+  const isActive = activeQuests.has(quest.id);
+  const isDone = completedQuests.has(quest.id);
+
+  let classes = `quest-card ${tier}`;
+  if (isActive) classes += ' active-quest';
+  if (isDone) classes += ' completed-quest';
+
+  const checkContent = isDone ? '✓' : (isActive ? '●' : '');
+
+  const stepsHtml = quest.steps.map((s, i) => `
+    <li class="step-item">
+      <span class="step-num ${tier}">${i+1}</span>
+      <span>${s}</span>
+    </li>
+  `).join('');
+
+  const tipHtml = quest.tip ? `
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <span>${quest.tip}</span>
+    </div>` : '';
+
+  const warnHtml = quest.warning ? `
+    <div class="warning-box">
+      <span class="tip-icon">⚠️</span>
+      <span>${quest.warning}</span>
+    </div>` : '';
+
+  return `
+    <div class="quest-card ${tier}${isActive?' active-quest':''}${isDone?' completed-quest':''}" 
+         id="card-${quest.id}" data-tier="${tier}" data-id="${quest.id}">
+      <div class="quest-card-header" onclick="toggleActive('${quest.id}')">
+        <div class="quest-checkbox ${tier}">${checkContent}</div>
+        <span class="quest-emoji">${quest.emoji}</span>
+        <span class="quest-name">${quest.name}</span>
+        <button class="quest-expand-btn" onclick="event.stopPropagation(); toggleExpand('${quest.id}')">▼</button>
+      </div>
+      <div class="quest-body" id="body-${quest.id}">
+        <p class="quest-description">${quest.desc}</p>
+        <div class="steps-title">Étapes</div>
+        <ul class="steps-list">${stepsHtml}</ul>
+        ${tipHtml}${warnHtml}
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <button onclick="markDone('${quest.id}')" style="
+            font-family:'Space Mono',monospace;font-size:10px;padding:6px 12px;
+            border-radius:8px;border:1px solid ${isDone?'#4b5563':'var(--border2)'};
+            background:${isDone?'#1f2937':'var(--bg3)'};
+            color:${isDone?'#6b7280':'var(--text-dim)'};cursor:pointer;
+            transition:all .2s;letter-spacing:1px;text-transform:uppercase;
+          ">${isDone?'✓ Complétée':'Marquer complétée'}</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ─── RENDER ALL ──────────────────────────────────────────────────────────────
+function renderAll() {
+  ['t1','t2','t3'].forEach(tier => {
+    const grid = document.getElementById(`grid-${tier}`);
+    grid.innerHTML = QUESTS[tier].map(q => renderCard(q, tier)).join('');
+  });
+  applyFilter();
+  updateStats();
+}
+
+// ─── TOGGLE ACTIVE (checkbox) ────────────────────────────────────────────────
+function toggleActive(id) {
+  if (completedQuests.has(id)) return;
+  if (activeQuests.has(id)) {
+    activeQuests.delete(id);
+  } else {
+    activeQuests.add(id);
+    // Auto-expand if activating
+    const body = document.getElementById(`body-${id}`);
+    if (body) body.classList.add('expanded');
+  }
+  const card = document.getElementById(`card-${id}`);
+  if (!card) return;
+  const tier = card.dataset.tier;
+  card.outerHTML = renderCard(findQuest(id), tier);
+  applyFilter();
+  updateStats();
+}
+
+// ─── MARK DONE ───────────────────────────────────────────────────────────────
+function markDone(id) {
+  if (completedQuests.has(id)) {
+    completedQuests.delete(id);
+    activeQuests.delete(id);
+  } else {
+    completedQuests.add(id);
+    activeQuests.delete(id);
+  }
+  const card = document.getElementById(`card-${id}`);
+  if (!card) return;
+  const tier = card.dataset.tier;
+  card.outerHTML = renderCard(findQuest(id), tier);
+  applyFilter();
+  updateStats();
+}
+
+// ─── TOGGLE EXPAND ───────────────────────────────────────────────────────────
+function toggleExpand(id) {
+  const body = document.getElementById(`body-${id}`);
+  if (!body) return;
+  body.classList.toggle('expanded');
+  const btn = body.previousElementSibling.querySelector('.quest-expand-btn');
+  if (btn) btn.textContent = body.classList.contains('expanded') ? '▲' : '▼';
+}
+
+// ─── FIND QUEST ──────────────────────────────────────────────────────────────
+function findQuest(id) {
+  for (const tier of ['t1','t2','t3']) {
+    const q = QUESTS[tier].find(q => q.id === id);
+    if (q) return q;
+  }
+}
+
+// ─── APPLY FILTER ────────────────────────────────────────────────────────────
+function applyFilter() {
+  let visibleTotal = 0;
+
+  ['t1','t2','t3'].forEach(tier => {
+    let visibleInTier = 0;
+    QUESTS[tier].forEach(quest => {
+      const card = document.getElementById(`card-${quest.id}`);
+      if (!card) return;
+
+      const matchFilter = 
+        currentFilter === 'all' ||
+        (currentFilter === tier) ||
+        (currentFilter === 'active' && activeQuests.has(quest.id)) ||
+        (currentFilter === 'done' && completedQuests.has(quest.id));
+
+      const matchSearch = searchQuery === '' ||
+        quest.name.toLowerCase().includes(searchQuery) ||
+        quest.desc.toLowerCase().includes(searchQuery);
+
+      if (matchFilter && matchSearch) {
+        card.classList.remove('hidden-card');
+        visibleInTier++;
+        visibleTotal++;
+      } else {
+        card.classList.add('hidden-card');
+      }
+    });
+
+    // Show/hide tier section
+    const section = document.getElementById(`section-${tier}`);
+    if (section) section.style.display = visibleInTier === 0 ? 'none' : '';
+    const count = document.getElementById(`count-${tier}`);
+    if (count) count.textContent = `${visibleInTier} quête${visibleInTier>1?'s':''}`;
+  });
+
+  // Empty state
+  const empty = document.getElementById('emptyState');
+  if (empty) empty.classList.toggle('visible', visibleTotal === 0);
+
+  // Filter notice
+  const notice = document.getElementById('filterNotice');
+  const noticeText = document.getElementById('filterNoticeText');
+  const hasFilter = currentFilter !== 'all' || searchQuery !== '';
+  if (notice) notice.classList.toggle('visible', hasFilter);
+  if (noticeText) {
+    const parts = [];
+    if (currentFilter !== 'all') parts.push(`Tier: ${currentFilter.toUpperCase()}`);
+    if (searchQuery) parts.push(`Recherche: "${searchQuery}"`);
+    noticeText.textContent = parts.join(' · ') + ` — ${visibleTotal} quête${visibleTotal>1?'s':''} affichée${visibleTotal>1?'s':''}`;
+  }
+}
+
+// ─── UPDATE STATS ────────────────────────────────────────────────────────────
+function updateStats() {
+  const active = activeQuests.size;
+  const done = completedQuests.size;
+  const diamonds = done * 5;
+
+  document.getElementById('stat-active').textContent = active;
+  document.getElementById('stat-done').textContent = done;
+  document.getElementById('stat-diamonds').textContent = diamonds;
+
+  const prog = Math.min(done, 3);
+  document.getElementById('progress-text').textContent = `${prog} / 3 quêtes`;
+  document.getElementById('progress-fill').style.width = `${(prog/3)*100}%`;
+}
+
+// ─── FILTER BUTTONS ──────────────────────────────────────────────────────────
+function clearFilter() {
+  currentFilter = 'all';
+  searchQuery = '';
+  document.getElementById('searchInput').value = '';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+  document.querySelector('[data-filter="all"]').classList.add('active-filter');
+  applyFilter();
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentFilter = btn.dataset.filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+    btn.classList.add('active-filter');
+    applyFilter();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value.toLowerCase().trim();
+  applyFilter();
+});
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+makeStars();
+renderAll();
+</script>
+</body>
+</html>

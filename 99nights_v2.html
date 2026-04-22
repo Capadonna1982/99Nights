@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>99 Nights — Guide Complet v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080a0f; --bg2:#0c0f18; --bg3:#11141e; --panel:#161b28; --panel2:#1c2236;
+  --border:#252d42; --border2:#3a4460;
+  --t1:#4ade80; --t1dim:#0f2a1a; --t1glow:rgba(74,222,128,.15);
+  --t2:#facc15; --t2dim:#2d2500; --t2glow:rgba(250,204,21,.15);
+  --t3:#f87171; --t3dim:#2d0f0f; --t3glow:rgba(248,113,113,.15);
+  --diamond:#67e8f9; --diamond-dim:#0a2830; --diamond-glow:rgba(103,232,249,.2);
+  --accent:#818cf8; --accent2:#6366f1;
+  --text:#c8d0e8; --text-dim:#6a788e; --text-bright:#eef2ff;
+  --gold:#fbbf24; --orange:#fb923c;
+  --nav-h:56px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:17px;min-height:100vh;overflow-x:hidden;}
+
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.7;}
+
+/* STARS */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite;opacity:0;}
+@keyframes twinkle{0%,100%{opacity:0}50%{opacity:var(--o,.5)}}
+
+/* ── HEADER ── */
+header{position:relative;z-index:10;text-align:center;padding:50px 20px 30px;border-bottom:1px solid var(--border);}
+header::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:400px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
+.header-badge{display:inline-block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--text-dim);border:1px solid var(--border2);padding:4px 14px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;}
+h1.site-title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,5vw,40px);font-weight:900;color:var(--text-bright);line-height:1.2;text-shadow:0 0 60px rgba(129,140,248,.4);margin-bottom:8px;}
+h1.site-title span{background:linear-gradient(135deg,#818cf8,#67e8f9,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.header-sub{font-style:italic;font-size:16px;color:var(--text-dim);}
+
+/* ── RESET TIMER ── */
+.reset-bar{position:relative;z-index:10;display:flex;justify-content:center;padding:14px 20px;background:linear-gradient(90deg,transparent,rgba(129,140,248,.06),transparent);border-bottom:1px solid var(--border);}
+.reset-inner{display:flex;align-items:center;gap:16px;font-family:'Space Mono',monospace;font-size:12px;flex-wrap:wrap;justify-content:center;}
+.reset-label{color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;}
+.reset-clock{display:flex;gap:8px;align-items:center;}
+.reset-seg{background:var(--panel);border:1px solid var(--border2);border-radius:8px;padding:6px 12px;color:var(--diamond);font-size:18px;font-weight:700;min-width:50px;text-align:center;letter-spacing:2px;}
+.reset-sep{color:var(--text-dim);font-size:20px;}
+.reset-note{color:var(--text-dim);font-size:10px;letter-spacing:1px;}
+.reset-urgent .reset-seg{color:var(--t3);border-color:var(--t3);animation:pulse-red .8s ease-in-out infinite;}
+@keyframes pulse-red{0%,100%{box-shadow:none}50%{box-shadow:0 0 12px rgba(248,113,113,.4)}}
+
+/* ── NAV TABS ── */
+nav.tabs{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;}
+nav.tabs::-webkit-scrollbar{display:none;}
+.tab-btn{flex-shrink:0;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:0 22px;height:var(--nav-h);border:none;background:none;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.tab-btn:hover{color:var(--text-bright);}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* ── TAB CONTENT ── */
+.tab-content{display:none;position:relative;z-index:10;}
+.tab-content.active{display:block;}
+
+/* ── STATS ROW ── */
+.stats-row{display:flex;justify-content:center;gap:16px;padding:18px 20px;flex-wrap:wrap;}
+.stat-chip{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 18px;}
+.stat-chip .gem{font-size:20px;}
+.stat-chip .val{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--diamond);}
+.stat-chip .lbl{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;}
+
+/* ── DIAMOND CALC ── */
+.calc-section{max-width:800px;margin:0 auto 32px;padding:0 20px;}
+.calc-box{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px;}
+.calc-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.calc-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.calc-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:14px;}
+.calc-input-wrap{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:8px 14px;flex:1;min-width:180px;}
+.calc-input-wrap label{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.calc-input{background:none;border:none;color:var(--text-bright);font-family:'Space Mono',monospace;font-size:18px;font-weight:700;width:80px;outline:none;}
+.calc-input::-webkit-outer-spin-button,.calc-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.calc-result{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 18px;}
+.calc-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+.calc-item{text-align:center;}
+.calc-item-val{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--diamond);}
+.calc-item-lbl{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+.calc-bar-wrap{margin-top:14px;}
+.calc-bar-label{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:6px;}
+.calc-bar-bg{height:8px;background:var(--bg2);border-radius:4px;border:1px solid var(--border);overflow:hidden;}
+.calc-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#818cf8,#67e8f9,#4ade80);transition:width .6s ease;}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{max-width:900px;margin:0 auto 20px;padding:0 20px;}
+.prog-label{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:6px;}
+.prog-bg{height:6px;background:var(--panel);border-radius:3px;border:1px solid var(--border);overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#818cf8,#67e8f9);border-radius:3px;transition:width .5s ease;width:0%;}
+
+/* ── ERRAND BADGES ── */
+.errands-wrap{max-width:900px;margin:0 auto 24px;padding:0 20px;}
+.errands-box{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 22px;}
+.errands-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:14px;}
+.errands-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.errand-item{text-align:center;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 8px;}
+.errand-icon{font-size:24px;margin-bottom:6px;}
+.errand-name{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px;}
+.errand-prog{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--diamond);}
+.errand-mini-bg{height:4px;background:var(--bg2);border-radius:2px;margin-top:6px;overflow:hidden;}
+.errand-mini-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--t1));transition:width .5s ease;}
+.errand-item.unlocked{border-color:var(--gold);box-shadow:0 0 12px rgba(251,191,36,.15);}
+.errand-item.unlocked .errand-prog{color:var(--gold);}
+
+/* ── CONTROLS ── */
+.controls{max-width:900px;margin:0 auto 14px;padding:0 20px;}
+.controls-inner{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.ctrl-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;}
+.filter-btns{display:flex;gap:8px;flex-wrap:wrap;flex:1;}
+.fbtn{font-family:'Space Mono',monospace;font-size:10px;padding:6px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text-dim);cursor:pointer;transition:all .2s;letter-spacing:1px;text-transform:uppercase;}
+.fbtn:hover{border-color:var(--accent);color:var(--text-bright);}
+.fbtn.af{background:var(--accent);border-color:var(--accent);color:#fff;}
+.fbtn.af.t1f{background:var(--t1);border-color:var(--t1);color:#000;}
+.fbtn.af.t2f{background:var(--t2);border-color:var(--t2);color:#000;}
+.fbtn.af.t3f{background:var(--t3);border-color:var(--t3);color:#000;}
+
+/* ── SEARCH ── */
+.search-wrap{position:relative;max-width:900px;margin:0 auto 20px;padding:0 20px;}
+.search-inp{width:100%;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:11px 18px 11px 44px;font-family:'Crimson Pro',serif;font-size:16px;color:var(--text-bright);outline:none;transition:border-color .2s;}
+.search-inp:focus{border-color:var(--accent);}
+.search-inp::placeholder{color:var(--text-dim);}
+.search-ico{position:absolute;left:34px;top:50%;transform:translateY(-50%);color:var(--text-dim);}
+
+/* ── TIER SECTION ── */
+.tier-section{max-width:900px;margin:0 auto 36px;padding:0 20px;}
+.tier-hdr{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.tier-badge{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:6px;font-weight:700;}
+.tier-badge.t1{background:var(--t1dim);color:var(--t1);border:1px solid var(--t1);}
+.tier-badge.t2{background:var(--t2dim);color:var(--t2);border:1px solid var(--t2);}
+.tier-badge.t3{background:var(--t3dim);color:var(--t3);border:1px solid var(--t3);}
+.tier-ttl{font-family:'Cinzel Decorative',serif;font-size:16px;color:var(--text-bright);}
+.tier-rew{margin-left:auto;font-family:'Space Mono',monospace;font-size:11px;color:var(--diamond);}
+.tier-cnt{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);padding:3px 10px;background:var(--bg3);border-radius:10px;border:1px solid var(--border);}
+.quests-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+
+/* ── QUEST CARD ── */
+.qcard{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .25s;position:relative;}
+.qcard:hover{border-color:var(--border2);box-shadow:0 6px 24px rgba(0,0,0,.4);}
+.qcard.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 6px 24px rgba(129,140,248,.2);}
+.qcard.active.t1{border-color:var(--t1);box-shadow:0 0 0 1px var(--t1),0 6px 24px var(--t1glow);}
+.qcard.active.t2{border-color:var(--t2);box-shadow:0 0 0 1px var(--t2),0 6px 24px var(--t2glow);}
+.qcard.active.t3{border-color:var(--t3);box-shadow:0 0 0 1px var(--t3),0 6px 24px var(--t3glow);}
+.qcard.done{opacity:.4;filter:grayscale(.8);}
+.qcard.hidden{display:none;}
+.qcard.active::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.qcard.active.t1::before{background:linear-gradient(90deg,transparent,var(--t1),transparent);}
+.qcard.active.t2::before{background:linear-gradient(90deg,transparent,var(--t2),transparent);}
+.qcard.active.t3::before{background:linear-gradient(90deg,transparent,var(--t3),transparent);}
+
+.qcard-hdr{display:flex;align-items:flex-start;gap:10px;padding:14px 14px 12px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
+.qchk{width:22px;height:22px;border-radius:6px;border:2px solid var(--border2);background:var(--bg3);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all .2s;font-size:12px;font-weight:700;}
+.active .qchk.t1{border-color:var(--t1);background:var(--t1dim);color:var(--t1);}
+.active .qchk.t2{border-color:var(--t2);background:var(--t2dim);color:var(--t2);}
+.active .qchk.t3{border-color:var(--t3);background:var(--t3dim);color:var(--t3);}
+.done .qchk{border-color:#4b5563;background:#1f2937;color:#6b7280;}
+.qemoji{font-size:20px;flex-shrink:0;margin-top:1px;}
+.qname{font-family:'Crimson Pro',serif;font-size:16px;font-weight:600;color:var(--text-bright);line-height:1.3;flex:1;}
+.done .qname{text-decoration:line-through;color:var(--text-dim);}
+.time-badge{font-family:'Space Mono',monospace;font-size:9px;padding:3px 8px;border-radius:6px;flex-shrink:0;margin-top:3px;border:1px solid;}
+.time-fast{color:#4ade80;border-color:#1a3d28;background:#0a1f14;}
+.time-med{color:#facc15;border-color:#3d3309;background:#1a1500;}
+.time-slow{color:#f87171;border-color:#3d1515;background:#1a0a0a;}
+
+.qbody{max-height:0;overflow:hidden;transition:max-height .45s ease,padding .3s ease;padding:0 14px;}
+.qbody.open{max-height:1400px;padding:0 14px 14px;}
+.qdesc{font-style:italic;color:var(--text-dim);font-size:15px;margin:12px 0 10px;padding-left:10px;border-left:2px solid var(--border2);}
+.steps-ttl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin:12px 0 8px;display:flex;align-items:center;gap:8px;}
+.steps-ttl::after{content:'';flex:1;height:1px;background:var(--border);}
+.steps-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.step-item{display:flex;gap:9px;align-items:flex-start;font-size:15px;line-height:1.5;color:var(--text);}
+.snum{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;min-width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+.t1 .snum{background:var(--t1dim);color:var(--t1);}
+.t2 .snum{background:var(--t2dim);color:var(--t2);}
+.t3 .snum{background:var(--t3dim);color:var(--t3);}
+.tip-box{margin-top:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:14px;color:var(--text-dim);display:flex;gap:7px;}
+.warn-box{margin-top:8px;background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.25);border-radius:10px;padding:9px 12px;font-size:14px;color:#fca5a5;display:flex;gap:7px;}
+.class-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.class-tag{font-family:'Space Mono',monospace;font-size:9px;padding:3px 9px;border-radius:6px;background:rgba(129,140,248,.12);border:1px solid rgba(129,140,248,.3);color:var(--accent);}
+.qcard-footer{display:flex;gap:8px;margin-top:12px;}
+.done-btn{font-family:'Space Mono',monospace;font-size:9px;padding:5px 12px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text-dim);cursor:pointer;transition:all .2s;letter-spacing:1px;text-transform:uppercase;}
+.done-btn:hover{border-color:var(--t1);color:var(--t1);}
+.done-btn.is-done{border-color:#4b5563;background:#1f2937;color:#6b7280;}
+
+/* ── DIAMOND CONFETTI ── */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:9999;}
+.conf{position:absolute;font-size:18px;animation:conf-fall 1.2s ease-out forwards;}
+@keyframes conf-fall{0%{transform:translateY(0) scale(1) rotate(0deg);opacity:1}100%{transform:translateY(80px) scale(.5) rotate(180deg);opacity:0}}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:60px 20px;display:none;}
+.empty-state.show{display:block;}
+.empty-ico{font-size:48px;margin-bottom:14px;}
+.empty-txt{font-style:italic;color:var(--text-dim);font-size:18px;}
+
+/* ══════════════════════════════════════════
+   TAB: ARMES
+══════════════════════════════════════════ */
+.content-wrap{max-width:960px;margin:0 auto;padding:30px 20px 60px;}
+.section-title{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--text-bright);margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.data-table{width:100%;border-collapse:collapse;margin-bottom:36px;}
+.data-table th{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);padding:10px 14px;text-align:left;background:var(--bg3);border-bottom:1px solid var(--border2);}
+.data-table td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:15px;vertical-align:top;}
+.data-table tr:hover td{background:rgba(255,255,255,.02);}
+.weapon-name{font-weight:600;color:var(--text-bright);}
+.weapon-en{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);display:block;margin-top:2px;}
+.dmg-badge{display:inline-block;font-family:'Space Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;background:var(--bg3);border:1px solid var(--border2);color:var(--text-dim);}
+.dmg-high{background:rgba(74,222,128,.1);border-color:var(--t1);color:var(--t1);}
+.dmg-top{background:rgba(250,204,21,.1);border-color:var(--t2);color:var(--t2);}
+.dmg-low{background:rgba(103,232,249,.1);border-color:var(--diamond);color:var(--diamond);}
+.obtain-tag{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;padding:3px 8px;border-radius:5px;background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.25);color:var(--accent);margin:2px 2px 0 0;}
+
+/* ══════════════════════════════════════════
+   TAB: CLASSES
+══════════════════════════════════════════ */
+.classes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:36px;}
+.class-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;transition:all .2s;}
+.class-card:hover{border-color:var(--border2);box-shadow:0 4px 20px rgba(0,0,0,.4);}
+.class-card-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.class-icon{font-size:26px;}
+.class-info{flex:1;}
+.class-name{font-family:'Crimson Pro',serif;font-weight:600;font-size:16px;color:var(--text-bright);}
+.class-cost{font-family:'Space Mono',monospace;font-size:11px;color:var(--diamond);}
+.class-tier-badge{font-family:'Space Mono',monospace;font-size:9px;padding:2px 8px;border-radius:5px;border:1px solid;margin-bottom:8px;display:inline-block;}
+.s-tier{background:rgba(250,204,21,.1);border-color:var(--t2);color:var(--t2);}
+.a-tier{background:rgba(74,222,128,.1);border-color:var(--t1);color:var(--t1);}
+.b-tier{background:rgba(103,232,249,.1);border-color:var(--diamond);color:var(--diamond);}
+.c-tier{background:rgba(107,114,128,.1);border-color:#6b7280;color:#9ca3af;}
+.class-perk{font-size:14px;color:var(--text-dim);margin-bottom:4px;padding-left:14px;position:relative;}
+.class-perk::before{content:'›';position:absolute;left:0;color:var(--accent);}
+.class-starter{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);margin-top:8px;padding:5px 8px;background:var(--bg3);border-radius:6px;border:1px solid var(--border);}
+
+/* ══════════════════════════════════════════
+   TAB: STRONGHOLD
+══════════════════════════════════════════ */
+.guide-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:20px;}
+.guide-card-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.guide-card-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.guide-steps{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.guide-step{display:flex;gap:12px;align-items:flex-start;font-size:16px;line-height:1.5;}
+.gnum{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;min-width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(129,140,248,.15);color:var(--accent);border:1px solid rgba(129,140,248,.3);}
+.floor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px;}
+.floor-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.floor-num{font-family:'Cinzel Decorative',serif;font-size:13px;color:var(--text-bright);margin-bottom:8px;}
+.floor-detail{font-size:14px;color:var(--text-dim);margin-bottom:4px;}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:10px;}
+.chk-item{font-size:15px;display:flex;gap:8px;align-items:center;}
+.chk-item::before{content:'□';color:var(--text-dim);}
+
+/* ══════════════════════════════════════════
+   CHATBOT
+══════════════════════════════════════════ */
+.chat-fab{position:fixed;bottom:24px;right:24px;z-index:1000;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 20px rgba(99,102,241,.5);transition:all .2s;}
+.chat-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(99,102,241,.7);}
+.chat-fab .notif{position:absolute;top:-2px;right:-2px;width:14px;height:14px;background:var(--t3);border-radius:50%;border:2px solid var(--bg);display:none;}
+.chat-fab .notif.show{display:block;}
+.chat-panel{position:fixed;bottom:90px;right:24px;z-index:1000;width:360px;max-height:560px;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;overflow:hidden;display:none;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.7);animation:slide-up .25s ease;}
+.chat-panel.open{display:flex;}
+@keyframes slide-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.chat-header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--panel);}
+.chat-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.chat-header-info{flex:1;}
+.chat-header-name{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-bright);font-weight:700;}
+.chat-header-status{font-family:'Space Mono',monospace;font-size:9px;color:var(--t1);letter-spacing:1px;}
+.chat-close{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:18px;padding:4px;border-radius:6px;transition:all .2s;}
+.chat-close:hover{background:var(--bg3);color:var(--text-bright);}
+.chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.chat-messages::-webkit-scrollbar{width:4px;}
+.chat-messages::-webkit-scrollbar-track{background:transparent;}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:15px;line-height:1.5;animation:msg-in .2s ease;}
+@keyframes msg-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{background:var(--panel);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px;align-self:flex-start;}
+.msg.user{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border-bottom-right-radius:4px;align-self:flex-end;}
+.msg.typing{background:var(--panel);border:1px solid var(--border);align-self:flex-start;padding:12px 16px;}
+.typing-dots{display:flex;gap:4px;align-items:center;}
+.typing-dots span{width:7px;height:7px;background:var(--text-dim);border-radius:50%;animation:dot-bounce .9s ease-in-out infinite;}
+.typing-dots span:nth-child(2){animation-delay:.15s;}
+.typing-dots span:nth-child(3){animation-delay:.3s;}
+@keyframes dot-bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}}
+.chat-input-area{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end;background:var(--panel);}
+.chat-inp{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:10px 14px;font-family:'Crimson Pro',serif;font-size:15px;color:var(--text-bright);outline:none;resize:none;max-height:100px;line-height:1.4;transition:border-color .2s;}
+.chat-inp:focus{border-color:var(--accent);}
+.chat-inp::placeholder{color:var(--text-dim);}
+.chat-send{background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .2s;}
+.chat-send:hover{transform:scale(1.05);}
+.chat-send:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.chat-suggestions{display:flex;gap:6px;flex-wrap:wrap;padding:8px 14px 0;}
+.chat-sugg{font-family:'Space Mono',monospace;font-size:9px;padding:4px 10px;border-radius:8px;background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.25);color:var(--accent);cursor:pointer;transition:all .2s;letter-spacing:.5px;}
+.chat-sugg:hover{background:rgba(129,140,248,.2);}
+
+@media(max-width:600px){
+  .quests-grid,.classes-grid,.floor-grid{grid-template-columns:1fr;}
+  .site-title{font-size:22px;}
+  .chat-panel{width:calc(100vw - 20px);right:10px;}
+  .errands-grid{grid-template-columns:1fr;}
+  .calc-result-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="confetti-wrap" id="confetti"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-badge">99 Nights in the Forest · Guide Complet v2</div>
+  <h1 class="site-title">Guide du <span>Survivant</span></h1>
+  <p class="header-sub">Quêtes · Armes · Classes · Stronghold · Assistant IA</p>
+</header>
+
+<!-- RESET TIMER -->
+<div class="reset-bar">
+  <div class="reset-inner">
+    <span class="reset-label">⏱ Reset des quêtes dans</span>
+    <div class="reset-clock" id="resetClock">
+      <div class="reset-seg" id="rh">00</div>
+      <span class="reset-sep">:</span>
+      <div class="reset-seg" id="rm">00</div>
+      <span class="reset-sep">:</span>
+      <div class="reset-seg" id="rs">00</div>
+    </div>
+    <span class="reset-note">10H AM HEURE DU PACIFIQUE</span>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="quests">📋 Quêtes</button>
+  <button class="tab-btn" data-tab="weapons">⚔️ Armes</button>
+  <button class="tab-btn" data-tab="classes">🎮 Classes</button>
+  <button class="tab-btn" data-tab="stronghold">🏰 Stronghold</button>
+</nav>
+
+<!-- ══════════════════ TAB: QUÊTES ══════════════════ -->
+<div class="tab-content active" id="tab-quests">
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-chip"><span class="gem">⚡</span><div><div class="val" id="sActive">0</div><div class="lbl">Actives</div></div></div>
+    <div class="stat-chip"><span class="gem">✅</span><div><div class="val" id="sDone">0</div><div class="lbl">Complétées</div></div></div>
+    <div class="stat-chip"><span class="gem">💎</span><div><div class="val" id="sDiam">0</div><div class="lbl">Diamonds</div></div></div>
+    <div class="stat-chip"><span class="gem">📅</span><div><div class="val" id="sTotal">0</div><div class="lbl">Total quêtes</div></div></div>
+  </div>
+
+  <!-- Diamond Calculator -->
+  <div class="calc-section">
+    <div class="calc-box">
+      <div class="calc-title">💎 Calculateur de Diamants</div>
+      <div class="calc-row">
+        <div class="calc-input-wrap">
+          <label>💎 Tu as :</label>
+          <input type="number" class="calc-input" id="calcHave" value="201" min="0" max="9999">
+        </div>
+        <div class="calc-input-wrap">
+          <label>🎯 Objectif :</label>
+          <input type="number" class="calc-input" id="calcGoal" value="600" min="0" max="9999">
+        </div>
+      </div>
+      <div class="calc-result">
+        <div class="calc-result-grid">
+          <div class="calc-item"><div class="calc-item-val" id="calcNeed">399</div><div class="calc-item-lbl">💎 manquants</div></div>
+          <div class="calc-item"><div class="calc-item-val" id="calcDays">27</div><div class="calc-item-lbl">jours (quêtes seules)</div></div>
+          <div class="calc-item"><div class="calc-item-val" id="calcStrongholds">80</div><div class="calc-item-lbl">runs Stronghold</div></div>
+          <div class="calc-item"><div class="calc-item-val" id="calcWeekend">7</div><div class="calc-item-lbl">heures (weekend x2)</div></div>
+        </div>
+        <div class="calc-bar-wrap">
+          <div class="calc-bar-label"><span>Progression vers l'objectif</span><span id="calcPct">34%</span></div>
+          <div class="calc-bar-bg"><div class="calc-bar-fill" id="calcFill" style="width:34%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Daily Progress -->
+  <div class="prog-wrap">
+    <div class="prog-label"><span>PROGRESSION JOURNALIÈRE</span><span id="progTxt">0 / 3 quêtes complétées</span></div>
+    <div class="prog-bg"><div class="prog-fill" id="progFill"></div></div>
+  </div>
+
+  <!-- Errand Badges -->
+  <div class="errands-wrap">
+    <div class="errands-box">
+      <div class="errands-title">🏅 BADGES ERRANDS — Quêtes totales complétées</div>
+      <div class="errands-grid">
+        <div class="errand-item" id="errand1"><div class="errand-icon">🥉</div><div class="errand-name">Errands I</div><div class="errand-prog" id="ep1">0 / 10</div><div class="errand-mini-bg"><div class="errand-mini-fill" id="ef1" style="width:0%"></div></div></div>
+        <div class="errand-item" id="errand2"><div class="errand-icon">🥈</div><div class="errand-name">Errands II</div><div class="errand-prog" id="ep2">0 / 50</div><div class="errand-mini-bg"><div class="errand-mini-fill" id="ef2" style="width:0%"></div></div></div>
+        <div class="errand-item" id="errand3"><div class="errand-icon">🥇</div><div class="errand-name">Errands III</div><div class="errand-prog" id="ep3">0 / 100</div><div class="errand-mini-bg"><div class="errand-mini-fill" id="ef3" style="width:0%"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="controls-inner">
+      <span class="ctrl-label">Filtrer :</span>
+      <div class="filter-btns">
+        <button class="fbtn af" data-f="all">Toutes</button>
+        <button class="fbtn t1f" data-f="t1">🟢 Tier 1</button>
+        <button class="fbtn t2f" data-f="t2">🟡 Tier 2</button>
+        <button class="fbtn t3f" data-f="t3">🔴 Tier 3</button>
+        <button class="fbtn" data-f="active">⚡ Actives</button>
+        <button class="fbtn" data-f="done">✅ Complétées</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <span class="search-ico">🔍</span>
+    <input type="text" class="search-inp" id="searchInp" placeholder="Rechercher une quête...">
+  </div>
+
+  <!-- Quest grids -->
+  <div class="tier-section" id="sec-t1">
+    <div class="tier-hdr"><span class="tier-badge t1">Tier 1</span><h2 class="tier-ttl">Quêtes Faciles</h2><span class="tier-rew">💎 5 diamonds</span><span class="tier-cnt" id="cnt-t1">10</span></div>
+    <div class="quests-grid" id="grid-t1"></div>
+  </div>
+  <div class="tier-section" id="sec-t2">
+    <div class="tier-hdr"><span class="tier-badge t2">Tier 2</span><h2 class="tier-ttl">Quêtes Moyennes</h2><span class="tier-rew">💎 5 + 🔥 Flamme</span><span class="tier-cnt" id="cnt-t2">8</span></div>
+    <div class="quests-grid" id="grid-t2"></div>
+  </div>
+  <div class="tier-section" id="sec-t3">
+    <div class="tier-hdr"><span class="tier-badge t3">Tier 3</span><h2 class="tier-ttl">Quêtes Difficiles</h2><span class="tier-rew">💎 5 + 🔥 Flamme</span><span class="tier-cnt" id="cnt-t3">8</span></div>
+    <div class="quests-grid" id="grid-t3"></div>
+  </div>
+  <div class="empty-state" id="emptyState"><div class="empty-ico">🌲</div><p class="empty-txt">Aucune quête trouvée...</p></div>
+</div>
+
+<!-- ══════════════════ TAB: ARMES ══════════════════ -->
+<div class="tab-content" id="tab-weapons">
+<div class="content-wrap">
+  <h2 class="section-title">🗡️ Armes de Mêlée</h2>
+  <table class="data-table">
+    <thead><tr><th>Nom FR</th><th>Dégâts</th><th>Effet spécial</th><th>Comment obtenir</th></tr></thead>
+    <tbody>
+      <tr><td><span class="weapon-name">Lance</span><span class="weapon-en">Spear</span></td><td><span class="dmg-badge">Faible-Moyen</span></td><td>Bonne portée, craftable</td><td><span class="obtain-tag">Crafting Bench</span></td></tr>
+      <tr><td><span class="weapon-name">Katana</span><span class="weapon-en">Katana</span></td><td><span class="dmg-badge dmg-high">Élevé</span></td><td>Swing rapide, idéal contre groupes</td><td><span class="obtain-tag">Pelt Trader</span></td></tr>
+      <tr><td><span class="weapon-name">Masse d'armes</span><span class="weapon-en">Morningstar</span></td><td><span class="dmg-badge dmg-high">Élevé</span></td><td>Meilleur DPS de mêlée</td><td><span class="obtain-tag">Gold Chests</span></td></tr>
+      <tr><td><span class="weapon-name">Épée laser</span><span class="weapon-en">Laser Sword</span></td><td><span class="dmg-badge dmg-high">Élevé</span></td><td>Meilleure portée, attention surchauffe</td><td><span class="obtain-tag">Vaisseau spatial</span></td></tr>
+      <tr><td><span class="weapon-name">Épée de glace</span><span class="weapon-en">Ice Sword</span></td><td><span class="dmg-badge dmg-high">Élevé</span></td><td>Ralentit les ennemis (chill)</td><td><span class="obtain-tag">Fancy Ice Chests</span><span class="obtain-tag">Grotte Ours Polaire</span></td></tr>
+      <tr><td><span class="weapon-name">Trident</span><span class="weapon-en">Trident</span></td><td><span class="dmg-badge dmg-top">Plus élevé</span></td><td>Portée = Lance, légèrement plus lent</td><td><span class="obtain-tag">Pêche</span></td></tr>
+      <tr><td><span class="weapon-name">Lance empoisonnée</span><span class="weapon-en">Poison Spear</span></td><td><span class="dmg-badge dmg-low">Faible + Poison</span></td><td>Poison 3 secondes par frappe</td><td><span class="obtain-tag">Frog Chest</span><span class="obtain-tag">Étang grenouilles</span></td></tr>
+      <tr><td><span class="weapon-name">Épée infernale</span><span class="weapon-en">Infernal Sword</span></td><td><span class="dmg-badge dmg-high">Élevé + Brûlure</span></td><td>Enflamme ennemis, cuit nourriture</td><td><span class="obtain-tag">Infernal Chests</span><span class="obtain-tag">Volcan</span></td></tr>
+      <tr><td><span class="weapon-name">Masse du Roi Cultiste</span><span class="weapon-en">Cultist King Mace</span></td><td><span class="dmg-badge dmg-top">⭐ LE PLUS ÉLEVÉ</span></td><td>Dégâts les plus élevés du jeu</td><td><span class="obtain-tag">Boss Cultist King</span></td></tr>
+      <tr><td><span class="weapon-name">Faux</span><span class="weapon-en">Scythe</span></td><td><span class="dmg-badge dmg-high">Élevé</span></td><td>Régénère HP à chaque frappe (~10 frappes = plein)</td><td><span class="obtain-tag">Vampire Chest</span></td></tr>
+      <tr><td><span class="weapon-name">Faux vampirique</span><span class="weapon-en">Vampire Scythe</span></td><td><span class="dmg-badge dmg-high">Élevé</span></td><td>Régénère via jauge de sang</td><td><span class="obtain-tag">Classe Vampire</span></td></tr>
+      <tr><td><span class="weapon-name">Marteau d'obsidirion</span><span class="weapon-en">Obsidiron Hammer</span></td><td><span class="dmg-badge dmg-high">Élevé</span></td><td>Mini-explosion après jauge de dégâts</td><td><span class="obtain-tag">Craft Obsidiron Bars</span></td></tr>
+      <tr><td><span class="weapon-name">Sarbacane</span><span class="weapon-en">Blowpipe</span></td><td><span class="dmg-badge">Moyen + Poison</span></td><td>Projectiles empoisonnés</td><td><span class="obtain-tag">Biomes mi-niveau</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">🔫 Armes à Distance</h2>
+  <table class="data-table">
+    <thead><tr><th>Nom FR</th><th>Munitions</th><th>Effet spécial</th><th>Comment obtenir</th></tr></thead>
+    <tbody>
+      <tr><td><span class="weapon-name">Revolver</span><span class="weapon-en">Revolver</span></td><td>Balles revolver</td><td>Polyvalent, efficace contre loups/cultistes</td><td><span class="obtain-tag">Sheds</span><span class="obtain-tag">Barns</span></td></tr>
+      <tr><td><span class="weapon-name">Fusil</span><span class="weapon-en">Rifle</span></td><td>Balles fusil</td><td>Haute précision, meilleure arme à feu</td><td><span class="obtain-tag">Ruined Houses</span><span class="obtain-tag">Watchtowers</span></td></tr>
+      <tr><td><span class="weapon-name">Fusil à pompe tactique</span><span class="weapon-en">Tactical Shotgun</span></td><td>Munitions shotgun (4 coups)</td><td>Dégâts proches massifs</td><td><span class="obtain-tag">Ruby Chests</span><span class="obtain-tag">Workshop</span></td></tr>
+      <tr><td><span class="weapon-name">Pistolet à rayons</span><span class="weapon-en">Ray Gun</span></td><td>Alien Tech (~10%/tir)</td><td>Tir rapide compact</td><td><span class="obtain-tag">Vaisseau spatial</span><span class="obtain-tag">Alien</span></td></tr>
+      <tr><td><span class="weapon-name">Canon laser</span><span class="weapon-en">Laser Cannon</span></td><td>Alien Tech (~80%/tir)</td><td>AOE dévastateur courte portée</td><td><span class="obtain-tag">Alien Chest</span><span class="obtain-tag">Classe Cyborg</span></td></tr>
+      <tr><td><span class="weapon-name">Lance-flammes</span><span class="weapon-en">Flamethrower</span></td><td>Bidons carburant</td><td>Contrôle de foule, cuit viande</td><td><span class="obtain-tag">Classe Pyromaniac</span></td></tr>
+      <tr><td><span class="weapon-name">Arbalète</span><span class="weapon-en">Crossbow</span></td><td>Flèches (illimitées)</td><td>Précision, chargeur 1 flèche</td><td><span class="obtain-tag">Biomes mi-niveau</span></td></tr>
+      <tr><td><span class="weapon-name">Arbalète infernale</span><span class="weapon-en">Infernal Crossbow</span></td><td>Flèches (illimitées)</td><td>Plus de dégâts + brûlure + cuit nourriture</td><td><span class="obtain-tag">Biomes avancés</span></td></tr>
+      <tr><td><span class="weapon-name">Kunai</span><span class="weapon-en">Kunai</span></td><td>120 kunais inclus</td><td>Lancer rapide, furtivité</td><td><span class="obtain-tag">Ruby Chests</span><span class="obtain-tag">Assassin</span></td></tr>
+      <tr><td><span class="weapon-name">Shuriken gelé</span><span class="weapon-en">Frozen Shuriken</span></td><td>70 shurikens inclus</td><td>Ralentit les cibles</td><td><span class="obtain-tag">Ice Chests</span></td></tr>
+      <tr><td><span class="weapon-name">Boule de neige</span><span class="weapon-en">Snowball</span></td><td>30 boules incluses</td><td>Distraction, ralentissement</td><td><span class="obtain-tag">Ice Chests</span></td></tr>
+      <tr><td><span class="weapon-name">Feu sauvage</span><span class="weapon-en">Wildfire</span></td><td>Aucune (jetable)</td><td>Crée flaques de feu AOE</td><td><span class="obtain-tag">Hot Chests</span><span class="obtain-tag">Cultist King</span></td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<!-- ══════════════════ TAB: CLASSES ══════════════════ -->
+<div class="tab-content" id="tab-classes">
+<div class="content-wrap">
+  <!-- Diamond calc reminder -->
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+    <span style="font-size:24px;">💎</span>
+    <div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;">TU AS ACTUELLEMENT</div><div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--diamond);" id="classCalcHave">201 💎</div></div>
+    <div style="flex:1;min-width:140px;"><div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:4px;">PROGRESSION VERS 600 💎</div><div style="height:8px;background:var(--bg3);border-radius:4px;border:1px solid var(--border);overflow:hidden;"><div id="classCalcBar" style="height:100%;border-radius:4px;background:linear-gradient(90deg,#818cf8,#67e8f9);width:33%;transition:width .5s;"></div></div></div>
+    <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);text-align:right;">Modifie dans<br>l'onglet Quêtes</div>
+  </div>
+
+  <h2 class="section-title">🟢 Classes Bon Marché (10–100 💎)</h2>
+  <div class="classes-grid" id="classGrid1"></div>
+  <h2 class="section-title">🟡 Classes Intermédiaires (150–300 💎)</h2>
+  <div class="classes-grid" id="classGrid2"></div>
+  <h2 class="section-title">🔴 Classes Premium (500–600 💎)</h2>
+  <div class="classes-grid" id="classGrid3"></div>
+</div>
+</div>
+
+<!-- ══════════════════ TAB: STRONGHOLD ══════════════════ -->
+<div class="tab-content" id="tab-stronghold">
+<div class="content-wrap">
+
+  <div class="guide-card">
+    <div class="guide-card-title">📋 Checklist avant d'entrer</div>
+    <ul class="checklist">
+      <li class="chk-item">Campfire niveau 4 minimum</li>
+      <li class="chk-item">Revolver ou Fusil avec 2+ stacks de munitions</li>
+      <li class="chk-item">3-5 bandages ou médkits</li>
+      <li class="chk-item">Stew ou nourriture en quantité</li>
+      <li class="chk-item">Armure si disponible</li>
+      <li class="chk-item">Carte avec localisation du Stronghold</li>
+      <li class="chk-item">Téléporteur placé à l'entrée (si disponible)</li>
+    </ul>
+  </div>
+
+  <div class="guide-card">
+    <div class="guide-card-title">🗺️ Préparer le run — Jours 1 à 3</div>
+    <ul class="guide-steps">
+      <li class="guide-step"><span class="gnum">J1</span><span>Fabrique une <strong>carte</strong> (3 bois) immédiatement — priorité absolue. Monte le campfire au <strong>niveau 3-4</strong>. Tue tous les lapins pour le <strong>Bunny Foot</strong>.</span></li>
+      <li class="guide-step"><span class="gnum">J2</span><span>Échange ton Bunny Foot au <strong>Pelt Trader</strong>. Chasse des loups pour un <strong>Wolf Pelt</strong>. Cherche un <strong>Revolver ou Fusil</strong> dans les Sheds/Barns.</span></li>
+      <li class="guide-step"><span class="gnum">J3</span><span>Monte le campfire au <strong>niveau 4</strong>. Stocke des munitions et de la nourriture. Repère le Stronghold sur ta carte (icône 3 diamants).</span></li>
+    </ul>
+  </div>
+
+  <div class="guide-card">
+    <div class="guide-card-title">🏰 Les 3 étages du Stronghold</div>
+    <div class="floor-grid">
+      <div class="floor-card">
+        <div class="floor-num">Étage 1 — Entrée</div>
+        <div class="floor-detail">🟢 Vague faible</div>
+        <div class="floor-detail" style="font-size:14px;color:var(--text-dim);">1 headshot de fusil suffit. Looter le placard à droite. Bats toutes les vagues avant de monter.</div>
+      </div>
+      <div class="floor-card">
+        <div class="floor-num">Étage 2 — Intermédiaire</div>
+        <div class="floor-detail">🟡 Vague moyenne</div>
+        <div class="floor-detail" style="font-size:14px;color:var(--text-dim);">Attention aux cultistes à arbalète — restent proches des murs. Utilise les barricades en béton.</div>
+      </div>
+      <div class="floor-card">
+        <div class="floor-num">Étage 3 — Final</div>
+        <div class="floor-detail">🔴 Vague difficile</div>
+        <div class="floor-detail" style="font-size:14px;color:var(--text-dim);">Jusqu'à 6 cultistes. Certains spawnent derrière toi. Soigne-toi entre les vagues. Progress sauvée même si tu pars.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="guide-card">
+    <div class="guide-card-title">💎 Stratégie de farm optimal</div>
+    <ul class="guide-steps">
+      <li class="guide-step"><span class="gnum">1</span><span>Entre dans le Stronghold du <strong>serveur actuel</strong> — c'est le niveau 1 (facile).</span></li>
+      <li class="guide-step"><span class="gnum">2</span><span>Bats les 3 étages. <strong>Ignore les piles de butin</strong> pendant le combat — les diamonds sont des récompenses de fin de run.</span></li>
+      <li class="guide-step"><span class="gnum">3</span><span>Ouvre le <strong>Diamond Chest</strong> (cristal bleu) = <strong>5 💎 garantis</strong>. Ouvre aussi Ruby et Gold Chests.</span></li>
+      <li class="guide-step"><span class="gnum">4</span><span><strong>Quitte le serveur</strong> immédiatement après — rejoins un nouveau serveur.</span></li>
+      <li class="guide-step"><span class="gnum">5</span><span>Le Stronghold repart au <strong>niveau 1</strong> dans le nouveau serveur. Répète!</span></li>
+    </ul>
+    <div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--t1);">15 💎/h</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);margin-top:4px;">SEMAINE NORMALE</div></div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--t2);">30 💎/h</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);margin-top:4px;">WEEKEND x2</div></div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--t3);">60 💎/h</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);margin-top:4px;">HARD MODE + WEEKEND</div></div>
+    </div>
+  </div>
+
+  <div class="guide-card">
+    <div class="guide-card-title">🎮 Meilleures classes pour le Stronghold</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:4px;">
+      <div style="background:var(--bg3);border:1px solid var(--t2);border-radius:10px;padding:12px;"><div style="font-weight:700;color:var(--text-bright);margin-bottom:4px;">🦾 Cyborg (600 💎)</div><div style="font-size:14px;color:var(--text-dim);">Canon laser AOE dévastateur. Meilleur solo.</div></div>
+      <div style="background:var(--bg3);border:1px solid var(--t1);border-radius:10px;padding:12px;"><div style="font-weight:700;color:var(--text-bright);margin-bottom:4px;">🧛 Vampire (600 💎)</div><div style="font-size:14px;color:var(--text-dim);">Lifesteal massif. Meilleure classe Stronghold.</div></div>
+      <div style="background:var(--bg3);border:1px solid var(--accent);border-radius:10px;padding:12px;"><div style="font-weight:700;color:var(--text-bright);margin-bottom:4px;">👊 Brawler (100 💎)</div><div style="font-size:14px;color:var(--text-dim);">Tanky, excellent en mêlée solo.</div></div>
+      <div style="background:var(--bg3);border:1px solid var(--diamond);border-radius:10px;padding:12px;"><div style="font-weight:700;color:var(--text-bright);margin-bottom:4px;">👽 Alien (100 💎)</div><div style="font-size:14px;color:var(--text-dim);">AOE et mobilité, nettoie les vagues vite.</div></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- CHATBOT FAB -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()">💬<div class="notif show" id="chatNotif"></div></button>
+
+<!-- CHATBOT PANEL -->
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-avatar">🌲</div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">Assistant 99 Nights</div>
+      <div class="chat-header-status">● EN LIGNE · Propulsé par Claude</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-suggestions" id="chatSuggs">
+    <button class="chat-sugg" onclick="sendSugg(this)">Meilleures classes?</button>
+    <button class="chat-sugg" onclick="sendSugg(this)">Comment farmer 600 💎?</button>
+    <button class="chat-sugg" onclick="sendSugg(this)">Stratégie Stronghold?</button>
+    <button class="chat-sugg" onclick="sendSugg(this)">Quêtes les plus faciles?</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot">👋 Salut! Je suis ton assistant spécialisé en <strong>99 Nights in the Forest</strong>. Pose-moi n'importe quelle question sur le jeu!</div>
+  </div>
+  <div class="chat-input-area">
+    <textarea class="chat-inp" id="chatInp" placeholder="Pose ta question..." rows="1" onkeydown="chatKeydown(event)"></textarea>
+    <button class="chat-send" id="chatSend" onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+const QUESTS = {
+  t1:[
+    {id:'q01',emoji:'🔧',name:'Améliorer un outil au niveau 2',time:'fast',classes:[],
+     desc:'Utilise le Skills Building pour upgrader n\'importe quel outil — hache, sac ou lampe.',
+     steps:['Ramasse du <strong>Scrap</strong> dans les bâtiments autour du campfire','Repère le <strong>Skills Building</strong> près de ton campfire (icône d\'outil sur la carte)','Interagis avec (touche <strong>E</strong>)','Sélectionne n\'importe quel outil — <strong>la hache est la plus facile</strong>','Confirme l\'upgrade → ✅'],
+     tip:'Fais ça dès le Jour 1 — tu as déjà tout ce qu\'il faut!'},
+    {id:'q02',emoji:'💰',name:'Dépenser 100 coins chez le Furniture Trader',time:'med',classes:[],
+     desc:'Acheter pour 100 Mossy Coins de meubles en un seul run.',
+     steps:['Ramasse des <strong>Mossy Coins</strong> partout (troncs tombés, bâtiments — 1 stack = 5 coins)','Tue des <strong>cultistes</strong> pour plus de coins (Cultist King = 3-5 coins)','Attends le message <em>"The Furniture Trader is wandering through the Forest today"</em>','Repère son icône sur la carte et va le voir','Achète des meubles bon marché jusqu\'à <strong>100 coins</strong> dépensés → ✅'],
+     warning:'Ne tue pas son cheval! La carriole disparaît et tu ne peux plus acheter.'},
+    {id:'q03',emoji:'🎨',name:'Peindre un meuble',time:'fast',classes:['Decorator'],
+     desc:'Appliquer de la peinture sur un meuble dans ta base.',
+     steps:['Trouve le Furniture Trader — le <strong>Paint Brush est sur le côté de sa carriole</strong> (gratuit!)','Ou joue la classe <strong>Decorator</strong> pour en avoir un dès le départ','Il peut aussi se trouver à la <strong>Fishing Hut</strong>','Achète un <strong>beanbag ou coussin</strong> (meubles peignables — PAS lanternes/toilettes)','Place le meuble, équipe le Paint Brush, maintiens <strong>E</strong> sur le meuble surligné → ✅'],
+     warning:'Seuls les beanbags, coussins et cloth frames peuvent être peints!'},
+    {id:'q04',emoji:'🪑',name:'Construire X meubles',time:'fast',classes:[],
+     desc:'Placer un certain nombre de meubles décoratifs near du campfire.',
+     steps:['Ramasse des <strong>Mossy Coins</strong> en explorant','Trouve le Furniture Trader et achète plusieurs items bon marché','Les items achetés = <strong>blueprints</strong> dans ton inventaire','Sélectionne chaque blueprint et place-le → ✅'],
+     tip:'Achète les items les moins chers pour maximiser le nombre avec peu de coins!'},
+    {id:'q05',emoji:'🌱',name:'Construire 5 parcelles de ferme',time:'fast',classes:[],
+     desc:'Placer 5 Farm Plots dans un seul run.',
+     steps:['Ramasse du <strong>Scrap</strong>','Upgrade le <strong>Crafting Bench</strong> au niveau 2','Craft 5 <strong>Farm Plot blueprints</strong>','Place les 5 parcelles près du campfire → ✅']},
+    {id:'q06',emoji:'🌸',name:'Collecter X fleurs',time:'fast',classes:[],
+     desc:'Ramasser des fleurs dans la forêt pendant un run.',
+     steps:['Explore dès le Jour 1 et ramasse toutes les fleurs visibles sur le sol (<strong>E</strong>)','Les fleurs poussent partout dans la forêt — petites taches colorées','Va chez la <strong>Fée</strong> dans le Fairy Biome — son jardin a <strong>9 fleurs gratuites</strong> → ✅'],
+     tip:'Les fleurs ne prennent pas de place dans le sac — ramasse tout!'},
+    {id:'q07',emoji:'🔥',name:'Survivre une nuit avec le feu éteint',time:'med',classes:[],
+     desc:'Passer une nuit entière sans que le campfire soit allumé.',
+     steps:['⚠️ <strong>Jours 1-5 seulement</strong> — le Cerf est peu dangereux','Avant le coucher du soleil, laisse le campfire se vider','Reste <strong>mobile</strong> — ne t\'arrête pas','Cache-toi derrière des rochers ou grimpe sur une structure','Utilise ta lampe de poche si nécessaire','Survie jusqu\'à l\'aube → ✅'],
+     warning:'NE JAMAIS faire après le Jour 10 — le Cerf devient mortel!'},
+    {id:'q08',emoji:'🖼️',name:'Accrocher un tableau',time:'fast',classes:[],
+     desc:'Placer un tableau sur un mur de ta base.',
+     steps:['Ramasse des Mossy Coins','Achète n\'importe quel tableau chez le Furniture Trader','Si pas de mur : construis-en un avec des logs au Crafting Bench','Sélectionne le tableau, place-le sur le mur → ✅']},
+    {id:'q09',emoji:'🌳',name:'Couper un Brightwood Tree',time:'med',classes:[],
+     desc:'Abattre un arbre lumineux spécial dans le Fairy Biome.',
+     steps:['Monte le campfire au <strong>niveau 3-4</strong>','Cherche le <strong>Fairy Biome</strong> sur la carte (zone dorée / champignons géants)','Repère un Brightwood Tree : <strong>tronc épais et légèrement lumineux</strong>','⚠️ Les arbres brun pâle ordinaires NE comptent PAS','Coupe-le avec ta hache → ✅'],
+     tip:'Les vrais Brightwood Trees droppent plus de bûches — double bénéfice!'},
+    {id:'q10',emoji:'📦',name:'Mettre un Upgrade Tablet dans le Crafting Bench',time:'med',classes:[],
+     desc:'Insérer un tablet d\'amélioration dans le Crafting Bench.',
+     steps:['Explore et ouvre des <strong>coffres Gold ou Legendary</strong> (zones profondes, campfire niv.4+)','Ramène l\'Upgrade Tablet à ta base','Ouvre le Crafting Bench','Insère l\'Upgrade Tablet dans le slot prévu → ✅']},
+  ],
+  t2:[
+    {id:'q11',emoji:'🦌',name:'Se faire chasser par le Cerf à pleine vitesse',time:'med',classes:[],
+     desc:'Laisser le Cerf te poursuivre jusqu\'à ce qu\'il atteigne sa vitesse maximale.',
+     steps:['Attends <strong>après le Jour 5</strong>','Mange un <strong>stew</strong> avant — HP plein','Garde ta lampe de poche chargée','La nuit, ne l\'éclaire PAS — attends qu\'il verrouille sa cible','Laisse-le courir vers toi quelques secondes','<strong>Cours vers le campfire</strong> → ✅ Quête validée','Éclaire-le immédiatement avec la lampe pour le faire fuir'],
+     warning:'Reste proche du campfire! Se faire attraper loin du feu = mort.'},
+    {id:'q12',emoji:'🎣',name:'Pêcher 5 choses qui ne sont pas des poissons',time:'med',classes:[],
+     desc:'Sortir 5 items non-poissons avec une canne à pêche.',
+     steps:['Monte le campfire au <strong>niveau 2</strong>','Va à la <strong>Fishing Hut</strong> et prends une Old Rod (gratuite)','Va à l\'<strong>étang aux grenouilles</strong> — les Frog Keys comptent!','Pêche jusqu\'à obtenir 5 items non-poissons → ✅'],
+     tip:'L\'étang aux grenouilles est le meilleur spot — les Frog Keys tombent souvent!'},
+    {id:'q13',emoji:'🧚',name:'Acheter une boîte de graines à la Fée',time:'med',classes:[],
+     desc:'Acheter un seed box chez le Fairy Trader avec des fleurs.',
+     steps:['Ramasse des <strong>fleurs</strong> partout dès le début','Monte campfire au <strong>niveau 3-4</strong>','Cherche le <strong>Fairy Biome</strong> (zone dorée)','Ramasse les 9 fleurs gratuites du jardin de la Fée','Achète 1 seed box pour <strong>20 fleurs</strong> → ✅'],
+     tip:'Premier seed box = 20 fleurs. Le prix monte de 20 à chaque achat suivant.'},
+    {id:'q14',emoji:'⚔️',name:'Battre une vague de cultistes en moins de 20 secondes',time:'fast',classes:['Grenadier','Assassin'],
+     desc:'Éliminer toute une vague de raid en 20 secondes maximum.',
+     steps:['Prépare une bonne arme (fusil, Katana, grenades)','Raids arrivent au <strong>Jour 4</strong>, puis ~tous les 4 jours','Positionne-toi <strong>près du campfire</strong>','Dès que la vague commence, attaque immédiatement','La classe <strong>Grenadier</strong> tue tout un groupe instantanément → ✅'],
+     tip:'Commence la vague de nuit près du feu — les cultistes sont groupés!'},
+    {id:'q15',emoji:'🛡️',name:'Survivre à 5 vagues de cultistes',time:'slow',classes:[],
+     desc:'Défendre ton camp contre 5 raids de cultistes (sur plusieurs jours).',
+     steps:['Construis des <strong>pièges</strong> autour du campfire (bear traps, piques)','Stocke bandages et médkits','Garde le feu bien alimenté pendant les nuits de raid','Soigne-toi entre les vagues','Répète pour <strong>5 raids</strong> → ✅']},
+    {id:'q16',emoji:'🐾',name:'Avoir 3 pets différents en même temps',time:'slow',classes:['Beastmaster','Zookeeper'],
+     desc:'Apprivoiser 3 animaux différents simultanément.',
+     steps:['Trouve une <strong>Taming Flute</strong> dans un coffre','Apprivoise un <strong>lapin</strong> (approche douce + flûte)','Apprivoise un <strong>loup</strong> (affaiblis sans tuer, puis flûte)','Apprivoise un <strong>3ème animal</strong> (renard, ours...)','Les 3 pets doivent être actifs en même temps → ✅'],
+     tip:'Classe Beastmaster niv.3 invoque automatiquement un Alpha Wolf!'},
+    {id:'q17',emoji:'💊',name:'Fabriquer 20 munitions',time:'fast',classes:[],
+     desc:'Crafté 20 unités de munitions à l\'Ammo Crate.',
+     steps:['Ramasse du <strong>Scrap</strong>','Craft une <strong>Ammo Crate</strong> au Crafting Bench','Place-la à ta base','Craft 20 unités de balles revolver ou fusil → ✅']},
+    {id:'q18',emoji:'🌟',name:'Consommer 50 lucioles',time:'med',classes:[],
+     desc:'Ramasser et consommer 50 lucioles pour recharger la lampe.',
+     steps:['Équipe ta <strong>lampe de poche</strong>','Les lucioles apparaissent <strong>la nuit</strong> — petites lumières clignotantes','Explore autour du campfire la nuit','Appuie sur <strong>E</strong> pour les ramasser et consomme-les','Répète jusqu\'à <strong>50 lucioles</strong> → ✅'],
+     tip:'Les zones profondes ont plus de lucioles!'},
+  ],
+  t3:[
+    {id:'q19',emoji:'💎',name:'Connecter les 4 fragments de la Gemme de la Forêt',time:'slow',classes:[],
+     desc:'Trouver et assembler les 4 fragments de la Gem of the Forest.',
+     steps:['Monte campfire au <strong>niveau 5-6</strong>','Explore les zones les plus profondes de la carte','Cherche des <strong>coffres légendaires</strong> et des <strong>grottes</strong>','Les fragments ressemblent à des éclats de cristal','Ramasse les 4 fragments et <strong>combine-les</strong> dans l\'inventaire → ✅'],
+     tip:'Prévois une session dédiée avec armure, médkits et nourriture.'},
+    {id:'q20',emoji:'🪖',name:'Fabriquer un casque à l\'atelier',time:'slow',classes:[],
+     desc:'Craft un helmet au Tool Workshop.',
+     steps:['Monte le <strong>Crafting Bench</strong> au niveau requis','Craft un <strong>Tool Workshop</strong>','Rassemble métal et scrap avancé (coffres high-tier)','Interagis avec le Tool Workshop','Craft n\'importe quel <strong>casque</strong> → ✅']},
+    {id:'q21',emoji:'🔴',name:'Ouvrir 3 Ruby Chests',time:'med',classes:[],
+     desc:'Ouvrir 3 coffres rubis — le Stronghold en garantit un par run!',
+     steps:['Farm le <strong>Stronghold niveau 1</strong> — garantit 1 Ruby Chest','Ouvre le Ruby Chest','<strong>Quitte le serveur</strong>, rejoins un nouveau','Le Stronghold repart au niveau 1','Répète <strong>3 fois</strong> → ✅'],
+     tip:'La Tier 3 la plus facile! 3 runs Stronghold = ~45 minutes.'},
+    {id:'q22',emoji:'🏰',name:'Compléter un Stronghold niveau 4',time:'slow',classes:['Vampire','Cyborg'],
+     desc:'Battre le Cultist Stronghold à sa 4ème difficulté dans le même serveur.',
+     steps:['Reste dans le <strong>même serveur</strong> (ne change pas entre les runs!)','Complète le Stronghold <strong>4 fois de suite</strong>','Amène une <strong>équipe complète</strong>','Beaucoup de munitions, armure et médkits requis','Bat les 3 étages du <strong>niveau 4</strong> → ✅'],
+     warning:'Le niveau 4 est très difficile — ne tente pas en solo sans top équipement!'},
+    {id:'q23',emoji:'⭐',name:'Fabriquer un item Tier 5',time:'slow',classes:[],
+     desc:'Craft n\'importe quel objet de tier 5.',
+     steps:['Monte le <strong>Crafting Bench</strong> au niveau maximum','Rassemble des matériaux rares : Obsidiron Bars, Cultist Gems','Filtre les items <strong>Tier 5</strong> dans le menu','Craft n\'importe lequel → ✅'],
+     tip:'Les Cultist Gems tombent sur les cultistes lors des raids!'},
+    {id:'q24',emoji:'🦴',name:'Manger 3 côtes levées (Ribs)',time:'med',classes:[],
+     desc:'Consommer 3 Ribs droppés sur des ours.',
+     steps:['Trouve des <strong>ours</strong> (zones profondes, campfire niv.3+)','Tue-les et récupère les <strong>Ribs</strong>','Cuisine les Ribs au campfire (ne mange pas cru!)','Mange <strong>3 Ribs</strong> → ✅'],
+     tip:'Les ours sont dangereux — prépare bon équipement avant!'},
+    {id:'q25',emoji:'🦣',name:'Apprivoiser un Mammouth',time:'slow',classes:['Zookeeper','Beastmaster'],
+     desc:'Dompter un mammouth dans le Snow Biome.',
+     steps:['Campfire <strong>niveau 5+</strong> pour accéder au Snow Biome','Prépare une <strong>Taming Flute améliorée</strong> (niv.2+)','Va dans le <strong>Snow Biome</strong>','Affaiblis le Mammouth <strong>très doucement</strong> — quelques frappes seulement','<strong>NE LE TUE PAS</strong>','Utilise la Taming Flute → ✅'],
+     warning:'Stock de carburant important avant le Snow Biome — le froid draine l\'endurance!'},
+    {id:'q26',emoji:'👑',name:'Vaincre le Cultist King',time:'slow',classes:['Vampire','Cyborg','Fire Bandit'],
+     desc:'Battre le boss final du Stronghold.',
+     steps:['Prépare armure, munitions abondantes, médkits et nourriture','Amène une <strong>équipe de 3-4 joueurs</strong> si possible','Bats les 3 étages du Stronghold normalement','Le <strong>Cultist King</strong> spawn au 3ème étage — boss avec énorme HP','Garde tes distances, utilise explosifs ou armes à feu','Évite ses attaques AOE en bougeant constamment → ✅'],
+     tip:'Récompense : La Masse du Roi Cultiste = arme de mêlée la plus puissante du jeu!'},
+  ]
+};
+
+const CLASSES = [
+  {g:1,icon:'🏕️',name:'Camper',cost:10,tier:'C',start:'Lampe de poche',perks:['Réduit la faim','Meilleure vision nocturne','Spawn avec 1 stew'],for:'Débutants'},
+  {g:1,icon:'🎒',name:'Scavenger',cost:25,tier:'B',start:'Aucun',perks:['+2 espace de sac','Ouvre coffres 20% plus vite','Chance de scrap bonus'],for:'Loot'},
+  {g:1,icon:'💉',name:'Medic',cost:40,tier:'A',start:'Médkit',perks:['Réanime 5x plus vite','Boost de force après réa','+ dégâts en bas HP'],for:'Équipe'},
+  {g:1,icon:'🍳',name:'Cook',cost:40,tier:'B',start:'Bandage',perks:['Cuisine 20% plus vite','Meilleure récupération faim'],for:'Survie longue'},
+  {g:1,icon:'🛡️',name:'Base Defender',cost:40,tier:'B',start:'2 plans de défense',perks:['Commence avec défenses','Peut les améliorer','Défenses font plus de dégâts'],for:'Défense base'},
+  {g:1,icon:'🪵',name:'Lumberjack',cost:70,tier:'A',start:'Hache améliorée',perks:['Récolte plus de bois','Chance de bûches bonus','Plante arbres plus vite'],for:'Construction'},
+  {g:1,icon:'🦁',name:'Zookeeper',cost:70,tier:'B',start:'Flûte d\'apprivoisement',perks:['Apprivoise plus vite','Soigne animaux plus vite'],for:'Pets'},
+  {g:1,icon:'🧭',name:'Explorer',cost:80,tier:'A',start:'Boussole + Carte',perks:['Sprint plus rapide','Espace sac amélioré','Vision nocturne'],for:'Solo / Exploration'},
+  {g:1,icon:'👊',name:'Brawler',cost:100,tier:'A',start:'Armure lourde',perks:['Meilleure résistance','Frappe plus fort en mêlée'],for:'Stronghold solo'},
+  {g:1,icon:'👽',name:'Alien',cost:100,tier:'A',start:'Pistolet à rayons',perks:['Excellente vision nocturne','Recharge alien tech vite','Sprint rapide à pleine charge'],for:'Stronghold / Combat'},
+  {g:1,icon:'💪',name:'Berserker',cost:100,tier:'A',start:'Médkit',perks:['Auto-réanimation à faible HP','Boost de force après réa','+ dégâts en bas HP'],for:'Combat solo'},
+  {g:1,icon:'🤝',name:'Support',cost:100,tier:'A',start:'Bandage',perks:['Bonus permanent par réa','Réanimation instantanée par équipe'],for:'Multijoueur'},
+  {g:1,icon:'🎯',name:'Ranger',cost:100,tier:'B',start:'Revolver',perks:['Chance récupérer balle','Meilleure précision'],for:'Armes à distance'},
+  {g:1,icon:'🎰',name:'Gambler',cost:100,tier:'C',start:'Item aléatoire',perks:['Peut améliorer ou dégrader les coffres','Imprévisible'],for:'Fun / RNG'},
+  {g:2,icon:'👨‍🍳',name:'Chef',cost:150,tier:'A',start:'Couteau de cuisine',perks:['Recettes améliorées','+HP +vitesse +vision','Excellent en équipe'],for:'Nourriture / Équipe'},
+  {g:2,icon:'🗡️',name:'Assassin',cost:200,tier:'S',start:'Katana + Kunais',perks:['Dégâts massifs','Speedrun des cavernes','Idéal pour trouver les enfants'],for:'Combat avancé'},
+  {g:2,icon:'🔨',name:'Engineer',cost:200,tier:'B',start:'Plans de construction',perks:['Construit structures avancées','Téléporteurs et pièges améliorés'],for:'Construction'},
+  {g:2,icon:'🎯',name:'Big Game Hunter',cost:300,tier:'S',start:'Fusil puissant',perks:['Upgrade permanent à chaque pelt','Très fort en fin de partie'],for:'Long run / Solo'},
+  {g:2,icon:'🔥',name:'Fire Bandit',cost:300,tier:'S',start:'Arbalète infernale + Wildfire',perks:['Feu partout','Excellent contre foules','Idéal Stronghold en équipe'],for:'Stronghold / Équipe'},
+  {g:2,icon:'🌙',name:'Nightcrawler',cost:300,tier:'A',start:'Dague fantôme',perks:['Dégâts explosifs dans l\'obscurité','Très dangereux la nuit'],for:'Combat nocturne'},
+  {g:3,icon:'🤖',name:'Cyborg',cost:600,tier:'S',start:'Armure alien + Canon laser',perks:['AOE dévastateur','Vision nocturne excellente','Kills rechargent alien tech'],for:'Solo / Stronghold'},
+  {g:3,icon:'🔴',name:'Pyromaniac',cost:600,tier:'S',start:'Lance-flammes',perks:['Contrôle de foule massif','Recharge avec carburant'],for:'Foules / Stronghold'},
+  {g:3,icon:'💀',name:'Necromancer',cost:600,tier:'S',start:'Bâton cultiste',perks:['Ressuscite jusqu\'à 6 cultistes','Vision nocturne avec l\'armée'],for:'Long run avancé'},
+  {g:3,icon:'🧛',name:'Vampire',cost:600,tier:'S',start:'Cape + Faux vampirique',perks:['Plus rapide la nuit','Lifesteal massif','Meilleure classe Stronghold'],for:'Stronghold / Combat'},
+];
+
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+const LS_KEY = '99nights_v2_state';
+let state = {active:[], done:[], totalDone:0, haveGems:201};
+
+function loadState(){
+  try {
+    const s = localStorage.getItem(LS_KEY);
+    if(s) state = {...state,...JSON.parse(s)};
+  } catch(e){}
+}
+function saveState(){
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){}
+}
+
+// ══════════════════════════════════════════════════════
+// STARS
+// ══════════════════════════════════════════════════════
+function makeStars(){
+  const c = document.getElementById('stars');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div');s.className='star';
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--o:${.3+Math.random()*.5};animation-delay:${Math.random()*5}s;`;
+    c.appendChild(s);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// RESET TIMER
+// ══════════════════════════════════════════════════════
+function updateTimer(){
+  const now = new Date();
+  const pst = new Date(now.toLocaleString('en-US',{timeZone:'America/Los_Angeles'}));
+  const reset = new Date(pst);
+  reset.setHours(10,0,0,0);
+  if(pst >= reset) reset.setDate(reset.getDate()+1);
+  const diff = reset - pst;
+  const h = Math.floor(diff/3600000);
+  const m = Math.floor((diff%3600000)/60000);
+  const s = Math.floor((diff%60000)/1000);
+  document.getElementById('rh').textContent = String(h).padStart(2,'0');
+  document.getElementById('rm').textContent = String(m).padStart(2,'0');
+  document.getElementById('rs').textContent = String(s).padStart(2,'0');
+  const clock = document.getElementById('resetClock');
+  clock.parentElement.classList.toggle('reset-urgent', h===0 && m < 10);
+}
+setInterval(updateTimer,1000);
+updateTimer();
+
+// ══════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ══════════════════════════════════════════════════════
+// DIAMOND CALCULATOR
+// ══════════════════════════════════════════════════════
+function updateCalc(){
+  const have = parseInt(document.getElementById('calcHave').value)||0;
+  const goal = parseInt(document.getElementById('calcGoal').value)||600;
+  state.haveGems = have;
+  saveState();
+  const need = Math.max(0, goal-have);
+  const pct = Math.min(100, Math.round((have/goal)*100));
+  const days = Math.ceil(need/15);
+  const strongholds = Math.ceil(need/5);
+  const weekendHours = +(need/30).toFixed(1);
+  document.getElementById('calcNeed').textContent = need;
+  document.getElementById('calcDays').textContent = days;
+  document.getElementById('calcStrongholds').textContent = strongholds;
+  document.getElementById('calcWeekend').textContent = weekendHours+'h';
+  document.getElementById('calcPct').textContent = pct+'%';
+  document.getElementById('calcFill').style.width = pct+'%';
+  // sync classes tab
+  document.getElementById('classCalcHave').textContent = have+' 💎';
+  document.getElementById('classCalcBar').style.width = pct+'%';
+}
+document.getElementById('calcHave').addEventListener('input', updateCalc);
+document.getElementById('calcGoal').addEventListener('input', updateCalc);
+
+// ══════════════════════════════════════════════════════
+// QUEST RENDER
+// ══════════════════════════════════════════════════════
+function getTimeLabel(t){
+  if(t==='fast') return {cls:'time-fast',txt:'⚡ ~2 min'};
+  if(t==='med') return {cls:'time-med',txt:'⏱ ~15 min'};
+  return {cls:'time-slow',txt:'⌛ ~1h+'};
+}
+
+function renderCard(q, tier){
+  const isActive = state.active.includes(q.id);
+  const isDone = state.done.includes(q.id);
+  const tl = getTimeLabel(q.time);
+  const stepsHtml = q.steps.map((s,i)=>`<li class="step-item"><span class="snum">${i+1}</span><span>${s}</span></li>`).join('');
+  const tipHtml = q.tip ? `<div class="tip-box"><span>💡</span><span>${q.tip}</span></div>` : '';
+  const warnHtml = q.warning ? `<div class="warn-box"><span>⚠️</span><span>${q.warning}</span></div>` : '';
+  const classTagsHtml = q.classes.length ? `<div class="class-tags">${q.classes.map(c=>`<span class="class-tag">✦ ${c}</span>`).join('')}</div>` : '';
+  const bodyOpen = isActive && !isDone ? ' open' : '';
+
+  return `<div class="qcard ${tier}${isActive?' active':''}${isDone?' done':''}" id="card-${q.id}" data-tier="${tier}" data-id="${q.id}">
+    <div class="qcard-hdr" onclick="toggleActive('${q.id}')">
+      <div class="qchk ${tier}">${isDone?'✓':isActive?'●':''}</div>
+      <span class="qemoji">${q.emoji}</span>
+      <span class="qname">${q.name}</span>
+      <span class="time-badge ${tl.cls}">${tl.txt}</span>
+    </div>
+    <div class="qbody${bodyOpen}" id="body-${q.id}">
+      <p class="qdesc">${q.desc}</p>
+      <div class="steps-ttl">Étapes</div>
+      <ul class="steps-list">${stepsHtml}</ul>
+      ${tipHtml}${warnHtml}${classTagsHtml}
+      <div class="qcard-footer">
+        <button class="done-btn${isDone?' is-done':''}" onclick="event.stopPropagation();markDone('${q.id}')">${isDone?'✓ Complétée':'Marquer complétée'}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderAll(){
+  ['t1','t2','t3'].forEach(tier=>{
+    document.getElementById('grid-'+tier).innerHTML = QUESTS[tier].map(q=>renderCard(q,tier)).join('');
+  });
+  applyFilter();
+  updateStats();
+}
+
+// ══════════════════════════════════════════════════════
+// TOGGLE ACTIVE
+// ══════════════════════════════════════════════════════
+function toggleActive(id){
+  if(state.done.includes(id)) return;
+  const card = document.getElementById('card-'+id);
+  const tier = card?.dataset.tier;
+  const wasActive = state.active.includes(id);
+
+  if(wasActive){
+    state.active = state.active.filter(x=>x!==id);
+    // close body
+    const body = document.getElementById('body-'+id);
+    if(body) body.classList.remove('open');
+  } else {
+    state.active.push(id);
+    // open body with animation
+    const body = document.getElementById('body-'+id);
+    if(body) { setTimeout(()=>body.classList.add('open'),10); }
+  }
+  saveState();
+  // re-render just this card
+  if(card && tier){
+    const q = findQ(id);
+    const newHtml = renderCard(q, tier);
+    card.outerHTML = newHtml;
+    // re-open if now active
+    if(!wasActive){
+      setTimeout(()=>{
+        const newBody = document.getElementById('body-'+id);
+        if(newBody) newBody.classList.add('open');
+      },10);
+    }
+  }
+  applyFilter();
+  updateStats();
+}
+
+// ══════════════════════════════════════════════════════
+// MARK DONE
+// ══════════════════════════════════════════════════════
+function markDone(id){
+  const wasDone = state.done.includes(id);
+  const card = document.getElementById('card-'+id);
+  const tier = card?.dataset.tier;
+
+  if(wasDone){
+    state.done = state.done.filter(x=>x!==id);
+    state.totalDone = Math.max(0,state.totalDone-1);
+  } else {
+    state.done.push(id);
+    state.active = state.active.filter(x=>x!==id);
+    state.totalDone++;
+    spawnConfetti(card);
+  }
+  saveState();
+  if(card && tier) card.outerHTML = renderCard(findQ(id), tier);
+  applyFilter();
+  updateStats();
+}
+
+function spawnConfetti(el){
+  const wrap = document.getElementById('confetti');
+  const rect = el?.getBoundingClientRect();
+  const cx = rect ? rect.left + rect.width/2 : window.innerWidth/2;
+  const cy = rect ? rect.top : window.innerHeight/2;
+  ['💎','✨','⭐','🌟','💫'].forEach((em,i)=>{
+    const div = document.createElement('div');
+    div.className='conf';
+    div.textContent=em;
+    div.style.cssText=`left:${cx+(-40+i*20)}px;top:${cy}px;animation-delay:${i*.08}s;`;
+    wrap.appendChild(div);
+    setTimeout(()=>div.remove(),1500);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// FILTER
+// ══════════════════════════════════════════════════════
+let currentFilter='all', searchQ='';
+
+document.querySelectorAll('.fbtn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    currentFilter=btn.dataset.f;
+    document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('af'));
+    btn.classList.add('af');
+    applyFilter();
+  });
+});
+document.getElementById('searchInp').addEventListener('input',e=>{
+  searchQ=e.target.value.toLowerCase().trim();
+  applyFilter();
+});
+
+function applyFilter(){
+  let total=0;
+  ['t1','t2','t3'].forEach(tier=>{
+    let vis=0;
+    QUESTS[tier].forEach(q=>{
+      const card=document.getElementById('card-'+q.id);
+      if(!card)return;
+      const matchF=currentFilter==='all'||(currentFilter===tier)||(currentFilter==='active'&&state.active.includes(q.id))||(currentFilter==='done'&&state.done.includes(q.id));
+      const matchS=!searchQ||q.name.toLowerCase().includes(searchQ)||q.desc.toLowerCase().includes(searchQ);
+      if(matchF&&matchS){card.classList.remove('hidden');vis++;total++;}
+      else card.classList.add('hidden');
+    });
+    const sec=document.getElementById('sec-'+tier);
+    if(sec)sec.style.display=vis===0?'none':'';
+    const cnt=document.getElementById('cnt-'+tier);
+    if(cnt)cnt.textContent=vis+' quête'+(vis>1?'s':'');
+  });
+  const empty=document.getElementById('emptyState');
+  if(empty)empty.classList.toggle('show',total===0);
+}
+
+// ══════════════════════════════════════════════════════
+// STATS
+// ══════════════════════════════════════════════════════
+function updateStats(){
+  const active=state.active.length;
+  const done=state.done.length;
+  const total=state.totalDone||0;
+  const diamonds=done*5;
+  document.getElementById('sActive').textContent=active;
+  document.getElementById('sDone').textContent=done;
+  document.getElementById('sDiam').textContent=diamonds;
+  document.getElementById('sTotal').textContent=total;
+  const prog=Math.min(done,3);
+  document.getElementById('progTxt').textContent=`${prog} / 3 quêtes complétées`;
+  document.getElementById('progFill').style.width=`${(prog/3)*100}%`;
+  // Errands
+  const t=total;
+  const milestones=[10,50,100];
+  milestones.forEach((m,i)=>{
+    const idx=i+1;
+    const p=Math.min(t,m);
+    document.getElementById(`ep${idx}`).textContent=`${p} / ${m}`;
+    document.getElementById(`ef${idx}`).style.width=`${(p/m)*100}%`;
+    const item=document.getElementById(`errand${idx}`);
+    if(item)item.classList.toggle('unlocked',t>=m);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// CLASSES RENDER
+// ══════════════════════════════════════════════════════
+function renderClasses(){
+  [1,2,3].forEach(g=>{
+    const grid=document.getElementById(`classGrid${g}`);
+    if(!grid)return;
+    grid.innerHTML=CLASSES.filter(c=>c.g===g).map(c=>`
+      <div class="class-card">
+        <div class="class-card-top">
+          <span class="class-icon">${c.icon}</span>
+          <div class="class-info">
+            <div class="class-name">${c.name}</div>
+            <div class="class-cost">${c.cost} 💎 ${c.cost<=( state.haveGems||201)?'<span style="color:var(--t1);font-size:10px;">✓ Accessible</span>':''}</div>
+          </div>
+        </div>
+        <div class="class-tier-badge ${c.tier.toLowerCase()}-tier">Tier ${c.tier}</div>
+        ${c.perks.map(p=>`<div class="class-perk">${p}</div>`).join('')}
+        <div class="class-starter">🎒 Départ : ${c.start}</div>
+        <div style="margin-top:8px;font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;">IDÉAL : ${c.for}</div>
+      </div>`).join('');
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════
+function findQ(id){
+  for(const t of ['t1','t2','t3']){
+    const q=QUESTS[t].find(q=>q.id===id);
+    if(q)return q;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// CHATBOT
+// ══════════════════════════════════════════════════════
+let chatOpen=false;
+let chatHistory=[];
+
+function toggleChat(){
+  chatOpen=!chatOpen;
+  const panel=document.getElementById('chatPanel');
+  const notif=document.getElementById('chatNotif');
+  panel.classList.toggle('open',chatOpen);
+  if(chatOpen){notif.classList.remove('show');document.getElementById('chatInp').focus();}
+}
+
+function sendSugg(btn){
+  document.getElementById('chatInp').value=btn.textContent;
+  document.getElementById('chatSuggs').style.display='none';
+  sendMessage();
+}
+
+function chatKeydown(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
+}
+
+async function sendMessage(){
+  const inp=document.getElementById('chatInp');
+  const msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  inp.style.height='auto';
+
+  addMsg('user',msg);
+  chatHistory.push({role:'user',content:msg});
+  document.getElementById('chatSuggs').style.display='none';
+
+  const typingId='typing-'+Date.now();
+  addTyping(typingId);
+  document.getElementById('chatSend').disabled=true;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`Tu es un expert du jeu Roblox "99 Nights in the Forest". Tu réponds en français, de façon concise et pratique. Tu connais tout sur : les quêtes journalières (Tier 1/2/3), les diamants, le Cultist Stronghold, les classes, les armes, le Cerf, les cultistes, les enfants manquants, le campfire, le Pelt Trader, la Fée, le Furniture Trader, les biomes (Snow, Volcano, Fairy), les codes actifs (afterparty=15💎, yay fishing=2💎). Réponds toujours en français. Sois précis et utile. Maximum 3-4 phrases sauf si la question nécessite plus de détails.`,
+        messages:chatHistory
+      })
+    });
+    const data=await res.json();
+    removeTyping(typingId);
+    if(data.content&&data.content[0]){
+      const reply=data.content[0].text;
+      chatHistory.push({role:'assistant',content:reply});
+      addMsg('bot',reply);
+    } else {
+      addMsg('bot','Désolé, je n\'ai pas pu obtenir une réponse. Réessaie!');
+    }
+  } catch(e){
+    removeTyping(typingId);
+    addMsg('bot','Erreur de connexion. Vérifie ta connexion internet et réessaie!');
+  }
+  document.getElementById('chatSend').disabled=false;
+}
+
+function addMsg(role,text){
+  const wrap=document.getElementById('chatMessages');
+  const div=document.createElement('div');
+  div.className=`msg ${role}`;
+  div.innerHTML=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  wrap.appendChild(div);
+  wrap.scrollTop=wrap.scrollHeight;
+}
+
+function addTyping(id){
+  const wrap=document.getElementById('chatMessages');
+  const div=document.createElement('div');
+  div.className='msg typing';div.id=id;
+  div.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+  wrap.appendChild(div);
+  wrap.scrollTop=wrap.scrollHeight;
+}
+
+function removeTyping(id){
+  const el=document.getElementById(id);
+  if(el)el.remove();
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+loadState();
+makeStars();
+renderAll();
+renderClasses();
+updateCalc();
+
+// Sync calc input with saved state
+document.getElementById('calcHave').value = state.haveGems || 201;
+updateCalc();
+</script>
+</body>
+</html>
